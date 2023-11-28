@@ -14,6 +14,7 @@ import {StorageKeys} from '@constants/global';
 function RootNavigation() {
   const {
     authentication: {isLogin, setIsLogin, setUserInfo, synchUserInfo},
+    config: {setConfig},
   } = useStore();
   const [isReady, setIsReady] = useState(false);
 
@@ -23,12 +24,16 @@ function RootNavigation() {
 
   const checkAuthentication = async () => {
     try {
-      const [token, userInfo] = await storage.multiGet([
+      const [token, userInfo, configsJson] = await storage.multiGet([
         StorageKeys.Token,
         StorageKeys.userInfo,
+        StorageKeys.Config,
       ]);
 
       const newInfo = await synchUserInfo();
+      const config = JSON.parse(configsJson[1] ?? '{}');
+
+      setConfig(config);
 
       setIsLogin(!!token[1]);
 

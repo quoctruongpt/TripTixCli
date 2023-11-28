@@ -1,38 +1,38 @@
-import { Button, Input, Text } from "@rneui/themed";
-import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
-import { View, FlatList, TouchableOpacity, SafeAreaView } from "react-native";
-import ReactNativeModal from "react-native-modal";
+import {Button, Input, Text} from '@rneui/themed';
+import React, {useDeferredValue, useEffect, useMemo, useState} from 'react';
+import {View, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
+import ReactNativeModal from 'react-native-modal';
 
 export const ChooseProvince: React.FC<{
-  data: { id: string; title: string }[];
+  data: {id: string; title: string}[];
   value: string;
   onChange: (value: string) => void;
   renderButton?: (title: string, onPress: () => void) => React.ReactNode;
   title?: string;
   placeholder?: string;
-}> = ({ data = [], value, onChange, renderButton, title, placeholder }) => {
+}> = ({data = [], value, onChange, renderButton, title, placeholder}) => {
   const dataNew = useMemo(() => {
-    return data.map((item) => {
+    return data.map(item => {
       const textSearch = item.title
         .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
 
-      return { ...item, textSearch };
+      return {...item, textSearch};
     });
   }, [data]);
   const [showPopup, setShowPopup] = useState(false);
-  const [valueSearch, setValueSearch] = useState("");
+  const [valueSearch, setValueSearch] = useState('');
   const defferedValue = useDeferredValue(valueSearch);
   const dataFilter = useMemo(() => {
     const search = defferedValue
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-    return dataNew.filter((item) => item.textSearch.includes(search));
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+    return dataNew.filter(item => item.textSearch.includes(search));
   }, [defferedValue, dataNew]);
   const selected = useMemo(() => {
-    return data.find((item) => item.id === value);
+    return data.find(item => item.id === value);
   }, [value, dataFilter]);
   console.log(data);
 
@@ -57,57 +57,50 @@ export const ChooseProvince: React.FC<{
       <ReactNativeModal
         isVisible={showPopup}
         onBackdropPress={onClose}
-        avoidKeyboard
-      >
+        avoidKeyboard>
         <View
           style={{
-            backgroundColor: "#fff",
+            backgroundColor: '#fff',
             borderRadius: 20,
             padding: 16,
             maxHeight: 500,
-          }}
-        >
-          <Text
-            style={{ fontSize: 16, fontWeight: "700", textAlign: "center" }}
-          >
-            {title ?? "Chọn điểm đến"}
+          }}>
+          <Text style={{fontSize: 16, fontWeight: '700', textAlign: 'center'}}>
+            {title ?? 'Chọn điểm đến'}
           </Text>
           <Input
             placeholder="Tìm kiếm"
-            onChangeText={(text) => setValueSearch(text)}
+            onChangeText={text => setValueSearch(text)}
             value={valueSearch}
           />
           <FlatList
             data={dataFilter}
-            keyExtractor={({ id }) => id}
-            style={{ maxHeight: 500, marginVertical: 16 }}
-            renderItem={({ item, index }) => (
+            keyExtractor={({id}) => id}
+            style={{maxHeight: 500, marginVertical: 16}}
+            renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => handleChoose(item.id)}
                 key={index}
                 style={{
                   padding: 12,
                   borderBottomWidth: 1,
-                  borderColor: "#ccc",
-                }}
-              >
+                  borderColor: '#ccc',
+                }}>
                 <Text
                   style={{
-                    fontWeight: "600",
-                    color: item.id === value ? "red" : "#4b4b4b",
-                    textAlign: "center",
-                  }}
-                >
+                    fontWeight: '600',
+                    color: item.id === value ? 'red' : '#4b4b4b',
+                    textAlign: 'center',
+                  }}>
                   {item.title}
                 </Text>
                 {!!item.description && (
                   <Text
                     style={{
-                      color: "grey",
+                      color: 'grey',
                       fontSize: 12,
-                      textAlign: "center",
-                    }}
-                  >
+                      textAlign: 'center',
+                    }}>
                     {item.description}
                   </Text>
                 )}
@@ -116,7 +109,7 @@ export const ChooseProvince: React.FC<{
           />
           <Button
             title="Đóng"
-            buttonStyle={{ borderRadius: 8 }}
+            buttonStyle={{borderRadius: 8}}
             onPress={onClose}
           />
         </View>

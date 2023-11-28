@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import {Dimensions} from 'react-native';
 
 const StatusApiCall = {
   Success: true,
@@ -6,11 +6,12 @@ const StatusApiCall = {
 };
 
 const StorageKeys = {
-  Token: "token",
-  userInfo: "user_info",
-  notificationToken: "notification_token",
+  Token: 'token',
+  userInfo: 'user_info',
+  notificationToken: 'notification_token',
+  Config: 'config',
 };
 
-const DeviceSize = Dimensions.get("screen");
+const DeviceSize = Dimensions.get('screen');
 
-export { StatusApiCall, StorageKeys, DeviceSize };
+export {StatusApiCall, StorageKeys, DeviceSize};

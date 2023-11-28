@@ -1,10 +1,12 @@
-import { createContext } from "react";
-import { Authentication } from "./AuthenticationStore";
-import { Route } from "./RouteStore";
+import {createContext} from 'react';
+import {Authentication} from './AuthenticationStore';
+import {Config} from './Config';
+import {Route} from './RouteStore';
 
 export const rootStore = {
   authentication: new Authentication(),
   route: new Route(),
+  config: new Config(),
 };
 
 export type TRootStore = typeof rootStore;

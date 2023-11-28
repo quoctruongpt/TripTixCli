@@ -22,7 +22,10 @@ export const SelectSeat: React.FC = () => {
   const {
     route: {routeInfo, setSeatSelected, setUserInformation},
     authentication: {userInfo},
+    config: {maxSeat},
   } = useStore();
+  console.log(maxSeat);
+
   const {fromId, toId} = useRoute<TAppRoute<'SelectSeat'>>().params || {};
   const [listSeat, setListSeat] = useState([]);
   const [listSelectSeat, setListSelectSeat] = useState([]);
@@ -52,8 +55,8 @@ export const SelectSeat: React.FC = () => {
       return;
     }
 
-    if (listSelectSeat.length >= 5) {
-      toast.show('Bạn chỉ được đặt tối đa 5 vé', {
+    if (listSelectSeat.length >= maxSeat) {
+      toast.show(`Bạn chỉ được đặt tối đa ${maxSeat} vé`, {
         type: 'danger',
       });
       return;

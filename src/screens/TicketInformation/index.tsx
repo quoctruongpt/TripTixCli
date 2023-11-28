@@ -58,8 +58,7 @@ export const TicketInformation: React.FC = () => {
         codeDropOffPoint: dropOff.id,
         seatName: seatSelected,
       };
-      dfasf;
-      // const {data} = await postBookTicket(params);
+      const {data} = await postBookTicket(params);
 
       if (data.status === StatusApiCall.Success) {
         synchUserInfo();

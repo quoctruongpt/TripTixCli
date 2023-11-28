@@ -6,10 +6,14 @@ import dayjs from 'dayjs';
 import {formatPrice} from '@utils/price';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Image} from 'react-native';
+import {useStore} from '@store';
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
 export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
+  const {
+    config: {percentRefundOver1Hour, percentRefundUnder1Hour, timeRefund},
+  } = useStore();
   const diff = useMemo(() => {
     const now = dayjs().add(7, 'hour').utc().format();
     const timeStart = dayjs(ticket?.tripDTO?.startTimee * 1000, {utc: true});
@@ -53,13 +57,15 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
           </Text>
           <Text style={{textAlign: 'center', marginBottom: 16}}>
             Thời gian tới khi chuyến xe khởi hành:{' '}
-            <Text style={{fontWeight: '600'}}>{diff}</Text> ngày
+            <Text style={{fontWeight: '600'}}>{diff}</Text> giờ
           </Text>
           <Text style={{textAlign: 'center', marginBottom: 16}}>
             Số tiền sẽ được hoàn trả:{' '}
             <Text style={{fontWeight: '600'}}>
               {formatPrice(
-                diff < 1 ? ticket.totalPrice * 0.85 : ticket.totalPrice * 0.95,
+                diff < timeRefund
+                  ? ticket.totalPrice * percentRefundUnder1Hour
+                  : ticket.totalPrice * percentRefundOver1Hour,
               )}
             </Text>
           </Text>

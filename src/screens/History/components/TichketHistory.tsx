@@ -72,6 +72,7 @@ export default function TichketHistory({listTicket, type, onRefresh}) {
   const [statusFilter, setStatusFilter] = useState('');
   const {
     authentication: {userInfo, synchUserInfo},
+    config: {hourCanNotCancel},
   } = useStore();
   const toast = useToast();
   const dataFilter = useMemo(() => {
@@ -106,14 +107,11 @@ export default function TichketHistory({listTicket, type, onRefresh}) {
       setCancel(null);
       setCanceling(booking.bookingCode);
       const now = dayjs().add(7, 'hour').utc().format();
-      const diff = dayjs(booking.tripDTO?.startTimee * 1000).diff(
-        now,
-        'minutes',
-      );
+      const diff = dayjs(booking.tripDTO?.startTimee * 1000).diff(now, 'hour');
 
-      if (diff < 30) {
+      if (diff < hourCanNotCancel) {
         toast.show(
-          'Xin lỗi, bạn không thể huỷ chuyến đi này do thời điểm đến khi xe chạy chỉ còn 30 phút',
+          `Xin lỗi, bạn không thể huỷ chuyến đi này do thời điểm đến khi xe chạy chỉ còn dưới ${hourCanNotCancel} tiếng`,
           {type: 'error'},
         );
         return;

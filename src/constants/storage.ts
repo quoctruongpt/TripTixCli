@@ -1,5 +1,6 @@
 const Keys = {
-  Provinces: "list_province",
+  Provinces: 'list_province',
+  Config: 'config',
 };
 
-export { Keys };
+export {Keys};
