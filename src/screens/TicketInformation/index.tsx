@@ -20,6 +20,7 @@ import {timeStampToUtc} from '@utils/time';
 import {Steps} from '@components/Steps';
 import {PopupError} from './components/PopupError';
 import {TAppRoute} from 'navigation/AppNavigator.type';
+import {postBookTicket} from '@httpClient/trip.api';
 
 export const TicketInformation: React.FC = () => {
   const navigation = useNavigation<TAppNavigation<'TicketInformation'>>();
