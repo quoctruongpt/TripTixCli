@@ -47,11 +47,12 @@ export const HistoryDriver: React.FC = () => {
   const getHistory = async () => {
     try {
       setLoading(true);
-      const time = dayjs(filter.time, {utc: true})
-        .set('hour', 0)
-        .set('minute', 0)
-        .add(7, 'hour')
-        .unix();
+      // const time = dayjs(filter.time, {utc: true})
+      //   .set('hour', 0)
+      //   .set('minute', 0)
+      //   .add(7, 'hour')
+      //   .unix();
+      const time = dayjs(filter.time).set('hour', 7).set('minute', 0).unix();
 
       const {data} = await getHistoryDriver(userInfo.idUserSystem, time);
       if (data.status === StatusApiCall.Success) {

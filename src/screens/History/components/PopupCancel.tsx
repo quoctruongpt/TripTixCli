@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {useMemo} from 'react';
@@ -7,13 +7,18 @@ import {formatPrice} from '@utils/price';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Image} from 'react-native';
 import {useStore} from '@store';
+import {ConfigContext} from '@navigation';
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
 export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
-  const {
-    config: {percentRefundOver1Hour, percentRefundUnder1Hour, timeRefund},
-  } = useStore();
+  // const {configs} = useContext(ConfigContext);
+  const {percentRefundOver1Hour, percentRefundUnder1Hour, timeRefund} = {
+    percentRefundOver1Hour: 0.95,
+    percentRefundUnder1Hour: 0.85,
+    timeRefund: 24,
+  };
+
   const diff = useMemo(() => {
     const now = dayjs().add(7, 'hour').utc().format();
     const timeStart = dayjs(ticket?.tripDTO?.startTimee * 1000, {utc: true});
@@ -22,6 +27,7 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
 
     return diff;
   }, [ticket]);
+
   return (
     <ReactNativeModal isVisible={show}>
       <View style={{backgroundColor: '#fff', borderRadius: 20}}>

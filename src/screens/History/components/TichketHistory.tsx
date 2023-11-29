@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -34,6 +34,7 @@ import {PopupFeedback} from './PopupFeedback';
 import {set} from 'mobx';
 import {TicketItem} from './TicketItem';
 import {Select} from '@components/Select';
+import {ConfigContext} from '@navigation';
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
@@ -72,8 +73,9 @@ export default function TichketHistory({listTicket, type, onRefresh}) {
   const [statusFilter, setStatusFilter] = useState('');
   const {
     authentication: {userInfo, synchUserInfo},
-    config: {hourCanNotCancel},
   } = useStore();
+  // const {configs} = useContext(ConfigContext);
+  const {hourCanNotCancel} = {hourCanNotCancel: 1};
   const toast = useToast();
   const dataFilter = useMemo(() => {
     return data.filter(item => {

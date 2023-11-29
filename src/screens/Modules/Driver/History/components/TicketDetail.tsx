@@ -1,5 +1,5 @@
 import ReactNativeModal from 'react-native-modal';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {ScrollView, Text, View, SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,6 +18,7 @@ import {StatusApiCall} from '@constants/global';
 import {ListCustomer} from './ListCustomer';
 import {timeStampToUtc} from '@utils/time';
 import {useStore} from '@store';
+import {ConfigContext} from '@navigation';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -35,9 +36,9 @@ export const TicketDetail = ({
 }) => {
   const [trip, setTrip] = useState(booking);
   const [loading, setLoading] = useState(false);
-  const {
-    config: {isModeTest},
-  } = useStore();
+
+  // const {configs} = useContext(ConfigContext);
+  const {isModeTest} = {isModeTest: true};
   const steps = booking?.listtripStopDTO.map(item => {
     const customers = booking.listBooking.filter(
       customer => customer.dropOffPoint === item.stationDTO.name,

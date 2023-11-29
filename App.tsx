@@ -14,10 +14,10 @@ import {StorageKeys, StatusApiCall} from '@constants/global';
 
 const Config = [
   {id: 16, name: 'max_seat'},
-  {id: 14, name: 'hour_can_not_cancel'},
-  {id: 18, name: 'percent_refund_over_1_hour'},
-  {id: 17, name: 'percent_refund_under_1_hour'},
-  {id: 13, name: 'time_refund'},
+  {id: 14, name: 'hourCanNotCancel'},
+  {id: 18, name: 'percentRefundOver1Hour'},
+  {id: 17, name: 'percentRefundUnder1Hour'},
+  {id: 13, name: 'timeRefund'},
 ];
 
 export default function App() {

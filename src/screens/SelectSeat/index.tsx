@@ -1,9 +1,10 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {StyleSheet, ScrollView, View, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Text} from '@rneui/base';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
+import {ConfigContext} from '@navigation';
 import {Image} from 'react-native';
 import {Images} from '@assets/images';
 import {ButtonApp} from '@components/Button';
@@ -22,9 +23,9 @@ export const SelectSeat: React.FC = () => {
   const {
     route: {routeInfo, setSeatSelected, setUserInformation},
     authentication: {userInfo},
-    config: {maxSeat},
   } = useStore();
-  console.log(maxSeat);
+  // const {configs} = useContext(ConfigContext);
+  const maxSeat = 5;
 
   const {fromId, toId} = useRoute<TAppRoute<'SelectSeat'>>().params || {};
   const [listSeat, setListSeat] = useState([]);

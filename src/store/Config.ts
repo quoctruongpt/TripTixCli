@@ -25,10 +25,10 @@ class Config {
     console.log(1, configs);
 
     this.maxSeat = configs.max_seat;
-    this.hourCanNotCancel = configs.hour_can_not_cancel;
-    this.percentRefundOver1Hour = configs.percent_refund_over_1_hour / 100;
-    this.percentRefundUnder1Hour = configs.percent_refund_under_1_hour / 100;
-    this.timeRefund = configs.time_refund;
+    this.hourCanNotCancel = configs.hourCanNotCancel;
+    this.percentRefundOver1Hour = configs.percentRefundOver1Hour / 100;
+    this.percentRefundUnder1Hour = configs.percentRefundUnder1Hour / 100;
+    this.timeRefund = configs.timeRefund;
   };
 }
 
