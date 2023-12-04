@@ -37,8 +37,6 @@ export const TransactionHistory: React.FC = () => {
   };
 
   const renderItem = ({item, index}) => {
-    console.log(item);
-
     return (
       <View
         style={{

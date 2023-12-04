@@ -128,7 +128,6 @@ export default function TichketHistory({listTicket, type, onRefresh}) {
         synchUserInfo();
       }
     } catch (e) {
-      console.log(e);
     } finally {
       setCanceling(null);
     }

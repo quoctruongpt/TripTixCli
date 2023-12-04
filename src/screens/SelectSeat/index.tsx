@@ -76,7 +76,8 @@ export const SelectSeat: React.FC = () => {
       name: userInfo.fullName,
       phone: userInfo.phone,
     });
-    navigation.navigate('TicketInformation', {fromId, toId});
+    // navigation.navigate('TicketInformation', {fromId, toId});
+    navigation.navigate('DepartureInformation', {fromId, toId});
   };
 
   const selectedSeatsText = listSelectSeat.join(', ');

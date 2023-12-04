@@ -47,7 +47,14 @@ export const TicketInformation: React.FC = () => {
     item => String(item.id) === String(userInformation.dropOffId),
   );
 
-  const totalPrice = seatSelected.length * routeInfo.fare;
+  const listOfPassingStations = routeInfo.listtripStopDTO.filter(item => {
+    return item.index >= pickup.index && item.index <= dropOff.index;
+  });
+
+  const totalPrice =
+    listOfPassingStations.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.costsIncurred;
+    }, 0) * seatSelected.length;
 
   const handlePayment = async () => {
     try {
@@ -117,18 +124,6 @@ export const TicketInformation: React.FC = () => {
             {label: 'Email', value: userInfo.email},
           ]}
         />
-        <View style={{backgroundColor: '#fff', marginBottom: 8}}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '800',
-              marginLeft: 16,
-              marginTop: 16,
-            }}>
-            Lộ trình
-          </Text>
-          <Steps data={routeInfo.listtripStopDTO} />
-        </View>
         <Box
           title="Thông tin chuyến xe"
           data={[

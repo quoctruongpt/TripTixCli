@@ -23,7 +23,6 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
     const now = dayjs().add(7, 'hour').utc().format();
     const timeStart = dayjs(ticket?.tripDTO?.startTimee * 1000, {utc: true});
     const diff = timeStart.diff(now, 'day');
-    console.log(now, ticket?.tripDTO?.startTimee, diff);
 
     return diff;
   }, [ticket]);

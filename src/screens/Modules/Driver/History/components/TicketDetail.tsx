@@ -76,8 +76,6 @@ export const TicketDetail = ({
     try {
       const {data} = await getTripDetail(booking.idTrip);
       if (data.status === StatusApiCall.Success) {
-        console.log('done', data.data);
-
         setTrip(data.data);
       }
     } catch {

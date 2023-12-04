@@ -30,7 +30,6 @@ export const BottomTabNavigator: React.FC = () => {
     authentication: {userInfo},
   } = useStore();
   const isDriver = userInfo.role === EAccountType.Driver;
-  console.log(isDriver);
 
   // if (userInfo.role == "ROLE_CUSTOMER") {
   return (

@@ -22,8 +22,6 @@ class Config {
   }
 
   setConfig = (configs: any) => {
-    console.log(1, configs);
-
     this.maxSeat = configs.max_seat;
     this.hourCanNotCancel = configs.hourCanNotCancel;
     this.percentRefundOver1Hour = configs.percentRefundOver1Hour / 100;

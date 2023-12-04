@@ -94,10 +94,6 @@ export const SelectRoute: React.FC = () => {
         fromId,
         toId,
         startTime: dayjs(dateSelected).set('hour', 7).set('minute', 0).unix(),
-        // startTime: dayjs(dateSelected, {utc: true})
-        //   .set('hour', 0)
-        //   .set('minute', 0)
-        //   .unix(),
       };
       const {data} = await getSearchTrips(params);
       if (data.status === StatusApiCall.Success) {

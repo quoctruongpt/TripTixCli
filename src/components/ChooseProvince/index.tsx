@@ -34,7 +34,6 @@ export const ChooseProvince: React.FC<{
   const selected = useMemo(() => {
     return data.find(item => item.id === value);
   }, [value, dataFilter]);
-  console.log(data);
 
   const onClose = () => {
     setShowPopup(false);
@@ -94,14 +93,14 @@ export const ChooseProvince: React.FC<{
                   }}>
                   {item.title}
                 </Text>
-                {!!item.description && (
+                {!!item.desc && (
                   <Text
                     style={{
                       color: 'grey',
                       fontSize: 12,
                       textAlign: 'center',
                     }}>
-                    {item.description}
+                    {item.desc}
                   </Text>
                 )}
               </TouchableOpacity>

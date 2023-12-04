@@ -3,7 +3,7 @@ import {ChooseProvince} from '@components/ChooseProvince';
 import {Steps} from '@components/Steps';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
 import {KeyboardAwareScrollView} from '@pietile-native-kit/keyboard-aware-scrollview';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {Chip, Input, Text} from '@rneui/themed';
 import {useStore} from '@store/index';
 import {formatPrice} from '@utils/price';
@@ -21,6 +21,7 @@ import {useForm, Controller} from 'react-hook-form';
 import {CarTypes} from '@constants/route';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
+import {TAppRoute} from '@navigation/AppNavigator.type';
 
 const schema = yup.object().shape({
   pickUpId: yup.string().required('Vui lòng chọn điểm đón'),
@@ -42,6 +43,8 @@ export const DepartureInformation: React.FC = () => {
     authentication: {userInfo},
     route: {routeInfo, seatSelected, setUserInformation},
   } = useStore();
+  const {fromId, toId} =
+    useRoute<TAppRoute<'DepartureInformation'>>().params ?? {};
   const {
     control,
     formState: {isValid},
@@ -63,8 +66,9 @@ export const DepartureInformation: React.FC = () => {
 
   const handleConfirm = dataForm => {
     setUserInformation(dataForm);
-    navigation.navigate('TicketInformation');
+    navigation.navigate('TicketInformation', {fromId, toId});
   };
+
   const isSubTrip = routeInfo.subTrip;
   const listLength = routeInfo.listtripStopDTO.length;
 
@@ -73,7 +77,6 @@ export const DepartureInformation: React.FC = () => {
       item => item.id === dropOffId,
     );
     const conditionIndex = indexDropOff >= 0 ? indexDropOff : listLength - 1;
-    console.log(indexDropOff);
 
     return routeInfo.listtripStopDTO.filter(item =>
       isSubTrip ? item.index < conditionIndex : item.type === 'PICKUP',
@@ -92,141 +95,139 @@ export const DepartureInformation: React.FC = () => {
   }, [pickUpId]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={{flex: 1, backgroundColor: '#f7f7f7'}}>
-        <KeyboardAwareScrollView style={{flex: 1}}>
-          <View style={styles.box}>
-            <Chip
-              title={`${formatPrice(routeInfo.fare)} - ${
-                CarTypes[routeInfo.busDTO.type]
-              }`}
-              containerStyle={{flexDirection: 'row'}}
-              buttonStyle={{backgroundColor: '#ccc'}}
-              titleStyle={{fontWeight: '700', color: '#000'}}
-            />
+    <SafeAreaView style={{flex: 1, backgroundColor: '#f7f7f7'}}>
+      <KeyboardAwareScrollView style={{flex: 1}}>
+        <View style={styles.box}>
+          <Chip
+            title={`${formatPrice(routeInfo.fare)} - ${
+              CarTypes[routeInfo.busDTO.type]
+            }`}
+            containerStyle={{flexDirection: 'row'}}
+            buttonStyle={{backgroundColor: '#ccc'}}
+            titleStyle={{fontWeight: '700', color: '#000'}}
+          />
 
-            <Steps data={routeInfo.listtripStopDTO} />
+          <Steps data={routeInfo.listtripStopDTO} />
+        </View>
+        <View style={[styles.box, {flexDirection: 'row'}]}>
+          <View style={{flex: 1}}>
+            <Text>Số ghế đã chọn</Text>
+            <Text style={styles.value}>{seatSelected.join(', ')}</Text>
           </View>
-          <View style={[styles.box, {flexDirection: 'row'}]}>
-            <View style={{flex: 1}}>
-              <Text>Số ghế đã chọn</Text>
-              <Text style={styles.value}>{seatSelected.join(', ')}</Text>
-            </View>
-            <TouchableOpacity onPress={navigation.goBack}>
-              <Text style={{color: '#f6a288'}}>Chọn lại</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.box}>
-            <Text>Vui lòng chọn điểm đón:</Text>
-            <Controller
-              control={control}
-              name="pickUpId"
-              render={({field: {value, onChange}}) => (
-                <ChooseProvince
-                  title="Chọn điểm đón"
-                  placeholder="Điểm đón"
-                  data={listPickup}
-                  onChange={(value: string) => {
-                    onChange(value);
-                    setPickUpId(value);
-                  }}
-                  value={value}
-                  renderButton={(title, onPress) => (
-                    <TouchableOpacity
-                      onPress={onPress}
-                      style={{
-                        borderWidth: 1,
-                        borderColor: '#ccc',
-                        borderRadius: 4,
-                        padding: 12,
-                        marginTop: 16,
-                        flexDirection: 'row',
-                      }}>
-                      <Text style={{flex: 1, color: title ? 'black' : '#ccc'}}>
-                        {title ?? 'Điểm đón'}
-                      </Text>
-                      <Icon name="chevron-down" size={20} />
-                    </TouchableOpacity>
-                  )}
-                />
-              )}
-            />
-          </View>
-          <View style={styles.box}>
-            <Text>Vui lòng chọn điểm đến:</Text>
-            <Controller
-              control={control}
-              name="dropOffId"
-              render={({field: {value, onChange}}) => (
-                <ChooseProvince
-                  title="Chọn điểm đến"
-                  placeholder="Điểm đến"
-                  data={listDropOff}
-                  onChange={(value: string) => {
-                    onChange(value);
-                    setDropOffId(value);
-                  }}
-                  value={value}
-                  renderButton={(title, onPress) => (
-                    <TouchableOpacity
-                      onPress={onPress}
-                      style={{
-                        borderWidth: 1,
-                        borderColor: '#ccc',
-                        borderRadius: 4,
-                        padding: 12,
-                        marginTop: 16,
-                        flexDirection: 'row',
-                      }}>
-                      <Text style={{flex: 1, color: title ? 'black' : '#ccc'}}>
-                        {title ?? 'Điểm đến'}
-                      </Text>
-                      <Icon name="chevron-down" size={20} />
-                    </TouchableOpacity>
-                  )}
-                />
-              )}
-            />
-          </View>
-          <View style={styles.box}>
-            <Controller
-              control={control}
-              name="name"
-              render={({field: {value, onChange}}) => (
-                <Input
-                  label="Thông tin khách"
-                  value={value}
-                  onChangeText={onChange}
-                  inputStyle={{fontSize: 16, fontWeight: '700'}}
-                  editable={false}
-                />
-              )}
-            />
-            <Controller
-              control={control}
-              name="phone"
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChangeText={onChange}
-                  inputStyle={{fontSize: 16}}
-                />
-              )}
-            />
-          </View>
-          <View style={[styles.box, {flex: 1}]} />
-        </KeyboardAwareScrollView>
-        <ButtonApp
-          title="Continue"
-          onPress={handleSubmit(handleConfirm)}
-          buttonStyle={{
-            backgroundColor: 'red',
-            margin: 10,
-          }}
-          disabled={!isValid}
-        />
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+          <TouchableOpacity onPress={navigation.goBack}>
+            <Text style={{color: '#f6a288'}}>Chọn lại</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.box}>
+          <Text>Vui lòng chọn điểm đón:</Text>
+          <Controller
+            control={control}
+            name="pickUpId"
+            render={({field: {value, onChange}}) => (
+              <ChooseProvince
+                title="Chọn điểm đón"
+                placeholder="Điểm đón"
+                data={listPickup}
+                onChange={(value: string) => {
+                  onChange(value);
+                  setPickUpId(value);
+                }}
+                value={value}
+                renderButton={(title, onPress) => (
+                  <TouchableOpacity
+                    onPress={onPress}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 4,
+                      padding: 12,
+                      marginTop: 16,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{flex: 1, color: title ? 'black' : '#ccc'}}>
+                      {title ?? 'Điểm đón'}
+                    </Text>
+                    <Icon name="chevron-down" size={20} />
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.box}>
+          <Text>Vui lòng chọn điểm đến:</Text>
+          <Controller
+            control={control}
+            name="dropOffId"
+            render={({field: {value, onChange}}) => (
+              <ChooseProvince
+                title="Chọn điểm đến"
+                placeholder="Điểm đến"
+                data={listDropOff}
+                onChange={(value: string) => {
+                  onChange(value);
+                  setDropOffId(value);
+                }}
+                value={value}
+                renderButton={(title, onPress) => (
+                  <TouchableOpacity
+                    onPress={onPress}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 4,
+                      padding: 12,
+                      marginTop: 16,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{flex: 1, color: title ? 'black' : '#ccc'}}>
+                      {title ?? 'Điểm đến'}
+                    </Text>
+                    <Icon name="chevron-down" size={20} />
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.box}>
+          <Controller
+            control={control}
+            name="name"
+            render={({field: {value, onChange}}) => (
+              <Input
+                label="Thông tin khách"
+                value={value}
+                onChangeText={onChange}
+                inputStyle={{fontSize: 16, fontWeight: '700'}}
+                editable={false}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="phone"
+            render={({field: {value, onChange}}) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                inputStyle={{fontSize: 16}}
+              />
+            )}
+          />
+        </View>
+        <View style={[styles.box, {flex: 1}]} />
+      </KeyboardAwareScrollView>
+      <ButtonApp
+        title="Continue"
+        onPress={handleSubmit(handleConfirm)}
+        buttonStyle={{
+          backgroundColor: 'red',
+          margin: 10,
+        }}
+        disabled={!isValid}
+      />
+    </SafeAreaView>
   );
 };
 
