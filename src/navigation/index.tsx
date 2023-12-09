@@ -6,12 +6,21 @@ import AppNavigator from './AppNavigator';
 import {useStore} from '@store/index';
 import {observer} from 'mobx-react-lite';
 import {storage} from '@storage/index';
-import {StorageKeys} from '@constants/global';
 // import * as SplashScreen from 'expo-splash-screen';
 import SplashScreen from 'react-native-splash-screen';
+import {getConfig} from '@httpClient/global.api';
+import {StorageKeys, StatusApiCall} from '@constants/global';
 
 // SplashScreen.preventAutoHideAsync();
 export const ConfigContext = createContext(null);
+
+const Config = [
+  {id: 16, name: 'max_seat'},
+  {id: 14, name: 'hourCanNotCancel'},
+  {id: 18, name: 'percentRefundOver1Hour'},
+  {id: 17, name: 'percentRefundUnder1Hour'},
+  {id: 13, name: 'timeRefund'},
+];
 
 function RootNavigation() {
   const {
@@ -35,15 +44,44 @@ function RootNavigation() {
   });
 
   useEffect(() => {
-    checkAuthentication();
+    getData();
   }, []);
+
+  const getData = async () => {
+    try {
+      await Promise.all([checkAuthentication(), getConfigApp()]);
+    } finally {
+      setIsReady(true);
+    }
+  };
+
+  const getConfigApp = async () => {
+    try {
+      const {data} = await getConfig();
+      if (data.status === StatusApiCall.Success) {
+        const config: Record<string, any> = {};
+        Config.forEach(item => {
+          const configItem = data.data.find(
+            (_item: any) => _item.idConfigSystem === item.id,
+          );
+          config[item.name] = configItem.value;
+        });
+
+        storage.setItem(StorageKeys.Config, JSON.stringify(config));
+        setConfig(config);
+      }
+    } catch {
+      const configsJson = await storage.getItem(StorageKeys.Config);
+      const config = JSON.parse(configsJson ?? '{}');
+      setConfig(config);
+    }
+  };
 
   const checkAuthentication = async () => {
     try {
-      const [token, userInfo, configsJson] = await storage.multiGet([
+      const [token, userInfo] = await storage.multiGet([
         StorageKeys.Token,
         StorageKeys.userInfo,
-        StorageKeys.Config,
       ]);
 
       const newInfo = await synchUserInfo();
@@ -51,17 +89,7 @@ function RootNavigation() {
       setIsLogin(!!token[1]);
 
       setUserInfo(newInfo ?? JSON.parse(userInfo[1] ?? '{}'));
-      if (configsJson[1]) {
-        const config = JSON.parse(configsJson[1] ?? '{}');
-        setConfig(config);
-        setConfigs({
-          ...config,
-          percentRefundOver1Hour: config.percentRefundOver1Hour / 100,
-          percentRefundUnder1Hour: config.percentRefundUnder1Hour / 100,
-        });
-      }
     } finally {
-      setIsReady(true);
     }
   };
 
