@@ -1,5 +1,7 @@
 package com.triptix;
+import android.os.Bundle;
 import expo.modules.ReactActivityDelegateWrapper;
+import org.devio.rn.splashscreen.SplashScreen;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -16,6 +18,12 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "TripTix";
   }
+
+  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link

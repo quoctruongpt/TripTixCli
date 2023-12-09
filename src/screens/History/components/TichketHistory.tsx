@@ -72,10 +72,9 @@ export default function TichketHistory({listTicket, type, onRefresh}) {
   const [feedback, setFeedback] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
   const {
-    authentication: {userInfo, synchUserInfo},
+    authentication: {userInfo, synchUserInfo, config},
   } = useStore();
-  // const {configs} = useContext(ConfigContext);
-  const {hourCanNotCancel} = {hourCanNotCancel: 1};
+  const {hourCanNotCancel} = {hourCanNotCancel: config?.hourCanNotCancel ?? 1};
   const toast = useToast();
   const dataFilter = useMemo(() => {
     return data.filter(item => {

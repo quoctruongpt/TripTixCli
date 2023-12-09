@@ -12,11 +12,13 @@ const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
 export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
-  // const {configs} = useContext(ConfigContext);
+  const {
+    authentication: {config},
+  } = useStore();
   const {percentRefundOver1Hour, percentRefundUnder1Hour, timeRefund} = {
-    percentRefundOver1Hour: 0.95,
-    percentRefundUnder1Hour: 0.85,
-    timeRefund: 24,
+    percentRefundOver1Hour: config?.percentRefundOver1Hour ?? 0.95,
+    percentRefundUnder1Hour: config?.percentRefundUnder1Hour ?? 0.85,
+    timeRefund: config?.timeRefund ?? 24,
   };
 
   const diff = useMemo(() => {

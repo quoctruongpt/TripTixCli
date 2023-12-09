@@ -1,5 +1,4 @@
 import RootNavigation from '@navigation';
-// import {Provider} from '@store';
 import {rootStore} from '@store/store';
 import {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -11,6 +10,7 @@ import {Provider, useStore} from '@store/index';
 import {PermissionsAndroid} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {StorageKeys, StatusApiCall} from '@constants/global';
+import React from 'react';
 
 const Config = [
   {id: 16, name: 'max_seat'},

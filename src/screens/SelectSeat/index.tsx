@@ -22,32 +22,14 @@ export const SelectSeat: React.FC = () => {
   const navigation = useNavigation<TAppNavigation<'SelectSeat'>>();
   const {
     route: {routeInfo, setSeatSelected, setUserInformation},
-    authentication: {userInfo},
+    authentication: {userInfo, config},
   } = useStore();
-  // const {configs} = useContext(ConfigContext);
-  const maxSeat = 5;
+  const maxSeat = config?.maxSeat ?? 5;
 
   const {fromId, toId} = useRoute<TAppRoute<'SelectSeat'>>().params || {};
-  const [listSeat, setListSeat] = useState([]);
   const [listSelectSeat, setListSelectSeat] = useState([]);
   const [showError, setShowError] = useState(false);
   const toast = useToast();
-
-  useEffect(() => {
-    handleGenSeats();
-  }, []);
-
-  const handleGenSeats = () => {
-    const array = [...Array(routeInfo.busDTO.capacity).keys()];
-    const seatBooked = routeInfo.seatNameBooking;
-
-    setListSeat(
-      array.map((_, index) => {
-        const name = `A${index < 9 ? 0 : ''}${index + 1}`;
-        return {id: name, name, avaiable: !seatBooked.includes(name)};
-      }),
-    );
-  };
 
   const onActiveSeat = seat => {
     const seatId = seat.seatName;
@@ -76,7 +58,6 @@ export const SelectSeat: React.FC = () => {
       name: userInfo.fullName,
       phone: userInfo.phone,
     });
-    // navigation.navigate('TicketInformation', {fromId, toId});
     navigation.navigate('DepartureInformation', {fromId, toId});
   };
 

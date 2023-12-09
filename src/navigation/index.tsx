@@ -8,14 +8,21 @@ import {observer} from 'mobx-react-lite';
 import {storage} from '@storage/index';
 import {StorageKeys} from '@constants/global';
 // import * as SplashScreen from 'expo-splash-screen';
+import SplashScreen from 'react-native-splash-screen';
 
 // SplashScreen.preventAutoHideAsync();
 export const ConfigContext = createContext(null);
 
 function RootNavigation() {
   const {
-    authentication: {isLogin, setIsLogin, setUserInfo, synchUserInfo},
-    config: {setConfig},
+    authentication: {
+      isLogin,
+      setIsLogin,
+      setUserInfo,
+      synchUserInfo,
+      setConfig,
+    },
+    // config: {setConfig},
   } = useStore();
   const [isReady, setIsReady] = useState(false);
   const [configs, setConfigs] = useState({
@@ -55,13 +62,12 @@ function RootNavigation() {
       }
     } finally {
       setIsReady(true);
-      // await SplashScreen.hideAsync();
     }
   };
 
   const onLayoutRootView = useCallback(async () => {
     if (isReady) {
-      // await SplashScreen.hideAsync();
+      SplashScreen.hide();
     }
   }, [isReady]);
 
