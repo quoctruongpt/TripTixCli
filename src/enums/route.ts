@@ -1,7 +1,7 @@
 enum ECarTypeId {
-  Limousine = "LIMOUSINE",
-  Bed = "GIƯỜNG",
-  Chair = "GHẾ",
+  Limousine = 'LIMOUSINE',
+  Bed = 'GIUONG',
+  Chair = 'GHE',
 }
 
-export { ECarTypeId };
+export {ECarTypeId};

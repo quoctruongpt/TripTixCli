@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home} from '@screens/Home';
 import {History} from '@screens/History';
@@ -10,6 +10,8 @@ import {useStore} from '@store/index';
 import {HomeDriver} from '@screens/Modules/Driver/Home';
 import {EAccountType} from '@enums';
 import {HistoryDriver} from '@screens/Modules/Driver/History';
+import {StatusApiCall} from '@constants/global';
+import {getNotification} from '@httpClient/notification.api';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,16 +32,31 @@ export const BottomTabNavigator: React.FC = () => {
     authentication: {userInfo},
   } = useStore();
   const isDriver = userInfo.role === EAccountType.Driver;
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  // if (userInfo.role == "ROLE_CUSTOMER") {
+  useEffect(() => {
+    getUnreadNotification();
+  }, []);
+
+  const getUnreadNotification = async () => {
+    try {
+      const {data} = await getNotification(userInfo.idUserSystem);
+      if (data.status === StatusApiCall.Success) {
+        setUnreadCount(data.data.length);
+      }
+    } catch {}
+  };
+
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        headerShown: false,
-        tabBarIcon: ({focused}) => tabBarIcon(focused, route),
-        tabBarActiveTintColor: Colors.Active,
-        tabBarInactiveTintColor: Colors.Inactive,
-      })}>
+      screenOptions={({route}) => {
+        return {
+          headerShown: false,
+          tabBarIcon: ({focused}) => tabBarIcon(focused, route),
+          tabBarActiveTintColor: Colors.Active,
+          tabBarInactiveTintColor: Colors.Inactive,
+        };
+      }}>
       <Tab.Screen
         name="Home"
         component={isDriver ? HomeDriver : Home}
@@ -53,7 +70,12 @@ export const BottomTabNavigator: React.FC = () => {
       <Tab.Screen
         name="Notification"
         component={Notification}
-        options={{title: 'Thông báo'}}
+        options={{
+          title: 'Thông báo',
+          headerTitle: 'Thông báo',
+          headerShown: true,
+          tabBarBadge: unreadCount,
+        }}
       />
       <Tab.Screen
         name="Profile"

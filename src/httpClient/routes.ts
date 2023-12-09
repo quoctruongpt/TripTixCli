@@ -34,6 +34,10 @@ const routes = {
     topUp: url.baseUrl + '/payment/create_payment-url',
     transactionHistory: url.baseUrl + '/payment-transaction',
   },
+  notification: {
+    getNotification: url.baseUrl + '/notification',
+    seenNotification: url.baseUrl + '/notification/seen',
+  },
 };
 
 export {routes};

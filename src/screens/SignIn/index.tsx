@@ -86,7 +86,7 @@ export const SignIn = () => {
                 errorMessage={errors.email?.message as string}
                 inputStyle={styles.inputStyle}
                 leftIcon={<Icon name="email-lock" size={20} />}
-                placeholder="Email/SĐT"
+                placeholder="Tên đăng nhập"
                 value={value}
                 onChangeText={onChange}
               />

@@ -87,7 +87,9 @@ export const TicketInformation: React.FC = () => {
 
       throw new Error(data.data);
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.data || error.message);
+      setErrorMessage(
+        error.response?.data?.data || error.message || 'Lỗi không xác định',
+      );
     } finally {
       setLoading(false);
     }

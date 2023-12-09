@@ -1,45 +1,115 @@
-import React, { useState } from "react";
-import { StyleSheet, ScrollView, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View } from "react-native";
-import { Header } from "@components/Header";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  Text,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {View} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useStore} from '@store';
+import {
+  getNotification,
+  putSeenNotification,
+} from '@httpClient/notification.api';
+import {StatusApiCall} from '@constants/global';
+import dayjs from 'dayjs';
 
 export const Notification: React.FC = () => {
   const [listNoti, setListNoti] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const {
+    authentication: {userInfo},
+  } = useStore();
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const {data} = await getNotification(userInfo.idUserSystem);
+      if (data.status === StatusApiCall.Success) {
+        const list = data.data.sort((a, b) => {
+          return b.createdDateL - a.createdDateL;
+        });
+        setListNoti(list);
+        putSeenNotification(userInfo.idUserSystem);
+      }
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Notification" color="red" colorText="white" />
-      <ScrollView style={{ flex: 1, padding: 0 }}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 10,
-          }}
-        >
-          {!listNoti && (
-            <>
+      <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={getNotification} />
+        }
+        data={listNoti}
+        keyExtractor={item => item.idNotification}
+        renderItem={({item}) => (
+          <View
+            style={{
+              padding: 16,
+              borderBottomWidth: 1,
+              borderBottomColor: '#ccc',
+              backgroundColor: item.seen ? '#fff' : '#F0F0F0',
+            }}>
+            {!item.seen && (
+              <View
+                style={{
+                  width: 4,
+                  height: 4,
+                  backgroundColor: 'red',
+                  borderRadius: 100,
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                }}
+              />
+            )}
+            <Text style={{fontSize: 12, fontWeight: '700', marginBottom: 8}}>
+              Hệ thống
+            </Text>
+            <Text>{item.description}</Text>
+            <Text
+              style={{
+                color: 'grey',
+                fontSize: 10,
+                fontStyle: 'italic',
+                textAlign: 'right',
+              }}>
+              {dayjs.unix(item.createdDateL).format('HH:mm - DD/MM/YYYY')}
+            </Text>
+          </View>
+        )}
+        ListEmptyComponent={
+          <>
+            !loading &&{' '}
+            <View>
               <Icon
                 name="notifications-paused"
                 size={80}
-                style={{ color: "black" }}
+                style={{color: 'black'}}
               />
-              <Text style={{ color: "orange" }}>Bạn không có thông báo</Text>
-            </>
-          )}
-        </View>
-      </ScrollView>
+              <Text style={{color: 'orange'}}>Bạn không có thông báo</Text>
+            </View>
+          </>
+        }
+      />
     </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
     padding: 0,
+    backgroundColor: '#fff',
   },
 });
