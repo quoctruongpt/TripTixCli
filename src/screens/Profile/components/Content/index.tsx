@@ -1,6 +1,6 @@
 import {Text, Avatar} from '@rneui/themed';
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
@@ -25,7 +25,14 @@ export const Content: React.FC = observer(() => {
   const onClickSelectRoute = () => {
     navigation.navigate('SelectRoute');
   };
-  const onClickLogout = async () => {
+  const onClickLogout = () => {
+    Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất khỏi ứng dụng?', [
+      {text: 'Đăng xuất', onPress: handleLogout},
+      {text: 'Đóng'},
+    ]);
+  };
+
+  const handleLogout = async () => {
     await deleteDataUser();
     setIsLogin(false);
   };
@@ -146,16 +153,11 @@ export const Content: React.FC = observer(() => {
         <Icon name="chevron-right" size={18} color="gray" />
       </View>
       <TouchableOpacity onPress={onClickLogout} style={styles.itemNormal}>
-        <Icon onPress={onClickLogout} name="logout" size={18} color="black" />
+        <Icon name="logout" size={18} color="black" />
         <View style={styles.textWrapper}>
           <Text style={{color: '#000', fontSize: 14}}>Đăng xuất</Text>
         </View>
-        <Icon
-          onPress={onClickLogout}
-          name="chevron-right"
-          size={18}
-          color="gray"
-        />
+        <Icon name="chevron-right" size={18} color="gray" />
       </TouchableOpacity>
     </View>
   );

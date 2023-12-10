@@ -29,7 +29,10 @@ export const TransactionHistory: React.FC = () => {
       const {data} = await getTransaction(userInfo.idUserSystem);
 
       if (data.status === StatusApiCall.Success) {
-        setData(data.data);
+        const list = data.data.sort(
+          (a, b) => b.dateTimeStamp - a.dateTimeStamp,
+        );
+        setData(list);
       }
     } finally {
       setIsLoading(false);
@@ -86,7 +89,7 @@ export const TransactionHistory: React.FC = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <FlatList
-        data={data.reverse()}
+        data={data}
         keyExtractor={item => item.idTransaction}
         renderItem={renderItem}
         refreshControl={
