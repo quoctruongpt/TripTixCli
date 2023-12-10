@@ -1,8 +1,14 @@
-import { EGender } from "@enums";
+import {EGender, EAccountType} from '@enums';
 
 const ListGender = [
-  { label: "Nam", value: EGender.Male },
-  { label: "Nữ", value: EGender.Female },
+  {label: 'Nam', value: EGender.Male},
+  {label: 'Nữ', value: EGender.Female},
 ];
 
-export { ListGender };
+const RoleCanLogin = [
+  EAccountType.Customer,
+  EAccountType.Driver,
+  EAccountType.Staff,
+];
+
+export {ListGender, RoleCanLogin};

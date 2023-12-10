@@ -42,7 +42,7 @@ export const BottomTabNavigator: React.FC = () => {
     try {
       const {data} = await getNotification(userInfo.idUserSystem);
       if (data.status === StatusApiCall.Success) {
-        setUnreadCount(data.data.length);
+        setUnreadCount(data.data.filter((item: any) => !item.seen).length);
       }
     } catch {}
   };
@@ -74,7 +74,7 @@ export const BottomTabNavigator: React.FC = () => {
           title: 'Thông báo',
           headerTitle: 'Thông báo',
           headerShown: true,
-          tabBarBadge: unreadCount,
+          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
         }}
       />
       <Tab.Screen

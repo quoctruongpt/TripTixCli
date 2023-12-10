@@ -65,6 +65,8 @@ export const TicketInformation: React.FC = () => {
         codePickUpPoint: pickup.id,
         codeDropOffPoint: dropOff.id,
         seatName: seatSelected,
+        phoneGuest: userInformation.phone,
+        nameGuest: userInformation.name,
       };
       const {data} = await postBookTicket(params);
 

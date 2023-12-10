@@ -13,12 +13,12 @@ import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {ButtonApp} from '@components/Button';
 import {useNavigation} from '@react-navigation/native';
-import {TAuthNavigation, TAuthRoute} from '@navigation/AuthNavigator.type';
+import {TAuthNavigation} from '@navigation/AuthNavigator.type';
 import {useStore} from '@store/index';
 import {postLogin, putTokenNotification} from '@httpClient/authentication.api';
 import {StatusApiCall, StorageKeys} from '@constants/global';
+import {RoleCanLogin} from '@constants/user';
 import {storage} from '@storage/index';
-import {registerForPushNotificationsAsync} from '@utils/app';
 
 const schema = yup.object().shape({
   email: yup.string().required('require').min(4, 'min 4'),
@@ -47,6 +47,14 @@ export const SignIn = () => {
       setIsLoading(true);
       const {data} = await postLogin(dataForm.email, dataForm.password);
       if (data.status === StatusApiCall.Success) {
+        if (!RoleCanLogin.includes(data.data.user.role)) {
+          setError('password', {
+            message:
+              'Bạn không có quyền truy cập ứng dụng. Vui lòng liên hệ Admin để được hỗ trợ',
+          });
+          return;
+        }
+
         await Promise.all([
           storage.setItem(StorageKeys.Token, data.data.token),
           storage.setItem(StorageKeys.userInfo, JSON.stringify(data.data.user)),
@@ -58,6 +66,8 @@ export const SignIn = () => {
         token && putTokenNotification(data.data.user.idUserSystem, token);
       }
     } catch (e) {
+      console.log(e);
+
       setError('password', {message: 'Đăng nhập thất bại. Vui lòng thử lại'});
     } finally {
       setIsLoading(false);

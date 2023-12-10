@@ -1,8 +1,8 @@
-import { data } from "@screens/SelectRoute/constant";
-import httpClient from ".";
-import { routes } from "./routes";
+import {data} from '@screens/SelectRoute/constant';
+import httpClient from '.';
+import {routes} from './routes';
 
-const baseURL = "http://btbs.ap-southeast-1.elasticbeanstalk.com";
+const baseURL = 'http://btbs.ap-southeast-1.elasticbeanstalk.com';
 
 const getTrips = ({
   routeId,
@@ -12,7 +12,7 @@ const getTrips = ({
   startTime: number;
 }) => {
   return httpClient.get(
-    `${routes.trip.getTrip}?routeId=${routeId}&startTime=${startTime}&status=READY&adminCheck=ACCEPT`
+    `${routes.trip.getTrip}?routeId=${routeId}&startTime=${startTime}&status=READY&adminCheck=ACCEPT`,
   );
 };
 
@@ -26,13 +26,13 @@ const getSearchTrips = ({
   startTime: number;
 }) => {
   return httpClient.get(
-    `${routes.trip.getSearchTrip}?codeDeparturePoint=${fromId}&codeDestination=${toId}&startTime=${startTime}`
+    `${routes.trip.getSearchTrip}?codeDeparturePoint=${fromId}&codeDestination=${toId}&startTime=${startTime}`,
   );
 };
 
 const getRouteInfo = (departurePoint: string, destination: string) =>
   httpClient.get(
-    `${routes.trip.getRouteInfo}?codeDeparturePoint=${departurePoint}&codeDestination=${destination}`
+    `${routes.trip.getRouteInfo}?codeDeparturePoint=${departurePoint}&codeDestination=${destination}`,
   );
 
 const postBookTicket = (data: {
@@ -41,6 +41,8 @@ const postBookTicket = (data: {
   codePickUpPoint: number;
   codeDropOffPoint: number;
   seatName: string[];
+  phoneGuest: string;
+  nameGuest: string;
 }) => httpClient.post(routes.trip.postBookTicket, data);
 
 const getBookings = (idCustomer: number) =>
@@ -61,13 +63,13 @@ const putFeedback = (idBooking: number, star: number) => {
 
 const getHistoryDriver = (driverId: number, time: number) => {
   return httpClient.get(
-    `${routes.trip.getHistoryDriver}?driverId=${driverId}&startTime=${time}`
+    `${routes.trip.getHistoryDriver}?driverId=${driverId}&startTime=${time}`,
   );
 };
 
 const putCheckin = (idTrip: number, bookingCode: string) => {
   return httpClient.put(
-    `${routes.trip.putCheckin}?idTrip=${idTrip}&bookingCode=${bookingCode}`
+    `${routes.trip.putCheckin}?idTrip=${idTrip}&bookingCode=${bookingCode}`,
   );
 };
 
@@ -80,7 +82,7 @@ const getTripDetail = (idTrip: number) => {
 };
 
 const putConfirmSuccessTrip = (idTrip: number) => {
-  return httpClient.put(routes.trip.confirmFinishTrip, { idTrip });
+  return httpClient.put(routes.trip.confirmFinishTrip, {idTrip});
 };
 
 export {

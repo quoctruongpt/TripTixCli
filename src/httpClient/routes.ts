@@ -15,6 +15,7 @@ const routes = {
     updateUserInfo: url.baseUrl + '/usersystem',
     changeCoin: url.baseUrl + '/usersystem/exchange-voucher-coins',
     putNotificationToken: url.baseUrl + '/usersystem/fcm-token-devide',
+    changePassword: url.baseUrl + '/usersystem/change-password',
   },
   trip: {
     getRouteInfo: url.baseUrl + '/route',

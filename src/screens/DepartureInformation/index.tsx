@@ -22,6 +22,7 @@ import {CarTypes} from '@constants/route';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {TAppRoute} from '@navigation/AppNavigator.type';
+import {EAccountType} from '@enums';
 
 const schema = yup.object().shape({
   pickUpId: yup.string().required('Vui lòng chọn điểm đón'),
@@ -199,8 +200,8 @@ export const DepartureInformation: React.FC = () => {
                 label="Thông tin khách"
                 value={value}
                 onChangeText={onChange}
-                inputStyle={{fontSize: 16, fontWeight: '700'}}
-                editable={false}
+                inputStyle={{fontSize: 16}}
+                editable={userInfo.role === EAccountType.Staff}
               />
             )}
           />
@@ -212,6 +213,7 @@ export const DepartureInformation: React.FC = () => {
                 value={value}
                 onChangeText={onChange}
                 inputStyle={{fontSize: 16}}
+                editable={userInfo.role === EAccountType.Staff}
               />
             )}
           />

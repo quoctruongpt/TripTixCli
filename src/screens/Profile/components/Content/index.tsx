@@ -114,7 +114,7 @@ export const Content: React.FC = observer(() => {
         />
         <View style={styles.textWrapper}>
           <Text onPress={onClickSettings} style={{color: '#000', fontSize: 14}}>
-            Cài đặt
+            Đổi mật khẩu
           </Text>
         </View>
         <Icon

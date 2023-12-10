@@ -89,9 +89,11 @@ export const Notification: React.FC = () => {
             </Text>
           </View>
         )}
-        ListEmptyComponent={
-          <>
-            !loading &&{' '}
+        ListEmptyComponent={() => {
+          if (loading) {
+            return null;
+          }
+          return (
             <View>
               <Icon
                 name="notifications-paused"
@@ -100,8 +102,8 @@ export const Notification: React.FC = () => {
               />
               <Text style={{color: 'orange'}}>Bạn không có thông báo</Text>
             </View>
-          </>
-        }
+          );
+        }}
       />
     </SafeAreaView>
   );

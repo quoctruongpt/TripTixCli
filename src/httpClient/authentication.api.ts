@@ -1,10 +1,10 @@
-import httpClient from ".";
-import { routes } from "./routes";
-import { TRegisterParams } from "src/types";
-import { url } from "./url";
+import httpClient from '.';
+import {routes} from './routes';
+import {TRegisterParams} from 'src/types';
+import {url} from './url';
 
 const postLogin = (username: string, password: string) =>
-  httpClient.post(routes.authentication.login, { username, password });
+  httpClient.post(routes.authentication.login, {username, password});
 
 const postRegister = (data: TRegisterParams) =>
   httpClient.post(routes.authentication.register, data);
@@ -19,8 +19,20 @@ const postSendOtp = (email: string) => {
 
 const postConfirmOtp = (email: string, otp: string) => {
   return httpClient.get(
-    `${routes.authentication.confirmOtp}?key=${email}&otp=${otp}`
+    `${routes.authentication.confirmOtp}?key=${email}&otp=${otp}`,
   );
+};
+
+const putChangePassword = (
+  idUser: number,
+  oldPassword: string,
+  newPassword: string,
+) => {
+  return httpClient.put(routes.authentication.changePassword, {
+    idUser,
+    oldPassword,
+    newPassword,
+  });
 };
 
 const putUpdateUserInfo = (data: {
@@ -58,4 +70,5 @@ export {
   putUpdateUserInfo,
   putExchangeCoins,
   putTokenNotification,
+  putChangePassword,
 };
