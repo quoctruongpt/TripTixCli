@@ -36,9 +36,8 @@ export const TicketDetail = ({
 }) => {
   const [trip, setTrip] = useState(booking);
   const [loading, setLoading] = useState(false);
+  const [isModeTest, setIsModeTest] = useState(false);
 
-  // const {configs} = useContext(ConfigContext);
-  const {isModeTest} = {isModeTest: true};
   const steps = booking?.listtripStopDTO.map(item => {
     const customers = booking.listBooking.filter(
       customer => customer.dropOffPoint === item.stationDTO.name,
@@ -59,7 +58,7 @@ export const TicketDetail = ({
   });
 
   const timeStart = dayjs(booking.startTimee * 1000, {utc: true});
-  const timeEnd = dayjs(booking.endTimee, {utc: true});
+  const timeEnd = dayjs(booking.endTimee * 1000, {utc: true});
   const now = dayjs().add(7, 'hour').utc().format();
 
   const nowToStart = timeStart.diff(now, 'minute');
@@ -171,24 +170,36 @@ export const TicketDetail = ({
             </View>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          style={{paddingVertical: 8, marginBottom: 4}}
-          onPress={() => setShowListCustomer(true)}>
-          <Text style={{color: 'blue', fontStyle: 'italic'}}>
-            Danh sách khách hàng
-          </Text>
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <TouchableOpacity
+            style={{paddingVertical: 8, marginBottom: 4}}
+            onPress={() => setShowListCustomer(true)}>
+            <Text style={{color: 'blue', fontStyle: 'italic'}}>
+              Danh sách khách hàng
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              width: 40,
+              height: 20,
+              marginBottom: 4,
+              backgroundColor: isModeTest ? 'red' : 'green',
+              borderRadius: 8,
+            }}
+            onPress={() => setIsModeTest(!isModeTest)}></TouchableOpacity>
+        </View>
         {showButtonStart ? (
-          <Button
-            title={'Xuất phát' + (isModeTest ? ' - test' : '')}
-            onPress={handleReady}
-            loading={loading}
-          />
+          <Button title={'Xuất phát'} onPress={handleReady} loading={loading} />
         ) : (
           <Text>
-            Còn {Math.floor(nowToStart / (24 * 60))} ngày{' '}
-            {Math.floor((nowToStart % (24 * 60)) / 60)} giờ{' '}
-            {(nowToStart % (24 * 60)) % 60} phút
+            {trip.status === BookingStatusId.Ready
+              ? `Còn ${Math.floor(nowToStart / (24 * 60))} ngày ${Math.floor(
+                  (nowToStart % (24 * 60)) / 60,
+                )} giờ ${
+                  (nowToStart % (24 * 60)) % 60
+                } phút có thể bắt đầu chuyến đi`
+              : ''}
           </Text>
         )}
         {trip.status === BookingStatusId.Run && (
@@ -200,7 +211,7 @@ export const TicketDetail = ({
         )}
         {showButtonSuccess && (
           <Button
-            title={'Hoàn thành chuyến' + (isModeTest ? ' - test' : '')}
+            title={'Hoàn thành chuyến'}
             onPress={handleSuccessTrip}
             buttonStyle={{marginTop: 12, backgroundColor: 'orange'}}
             loading={loading}
