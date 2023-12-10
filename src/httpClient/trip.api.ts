@@ -85,6 +85,17 @@ const putConfirmSuccessTrip = (idTrip: number) => {
   return httpClient.put(routes.trip.confirmFinishTrip, {idTrip});
 };
 
+const getHistoryTripDriver = (
+  driverId: number,
+  status: string,
+  page: number,
+  totalPage: number,
+) => {
+  return httpClient.get(
+    `${routes.trip.historyTripDriver}?driverId=${driverId}&status=${status}&pageIndex=${page}&pageSize=${totalPage}`,
+  );
+};
+
 export {
   getTrips,
   getRouteInfo,
@@ -98,4 +109,5 @@ export {
   getTripDetail,
   putConfirmSuccessTrip,
   getSearchTrips,
+  getHistoryTripDriver,
 };

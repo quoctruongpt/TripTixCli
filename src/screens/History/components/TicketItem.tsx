@@ -132,7 +132,7 @@ export const TicketItem: React.FC<{
   );
 };
 
-const InfoItem = ({
+export const InfoItem = ({
   label,
   value,
   icon,

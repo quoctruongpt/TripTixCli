@@ -30,6 +30,7 @@ const routes = {
     getTripDetail: url.baseUrl + '/trips/detail',
     confirmFinishTrip: url.baseUrl + '/trips/confirm-finish-trip-by-driver',
     getSearchTrip: url.baseUrl + '/trips/search',
+    historyTripDriver: url.baseUrl + '/trips/history-driver',
   },
   payment: {
     topUp: url.baseUrl + '/payment/create_payment-url',

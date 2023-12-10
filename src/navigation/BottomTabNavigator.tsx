@@ -12,14 +12,18 @@ import {EAccountType} from '@enums';
 import {HistoryDriver} from '@screens/Modules/Driver/History';
 import {StatusApiCall} from '@constants/global';
 import {getNotification} from '@httpClient/notification.api';
+import {ListTrip} from '@screens/Modules/Driver/ListTrip';
 
 const Tab = createBottomTabNavigator();
 
 const IconsBottomTab = {
-  Home: 'home',
-  History: 'stopwatch',
-  Notification: 'notifications-sharp',
-  Profile: 'person-sharp',
+  Home: {customer: 'home', driver: 'list-circle-sharp'},
+  History: {customer: 'stopwatch', driver: 'stopwatch'},
+  Notification: {
+    customer: 'notifications-sharp',
+    driver: 'notifications-sharp',
+  },
+  Profile: {customer: 'person-sharp', driver: 'person-sharp'},
 };
 
 const Colors = {
@@ -52,19 +56,19 @@ export const BottomTabNavigator: React.FC = () => {
       screenOptions={({route}) => {
         return {
           headerShown: false,
-          tabBarIcon: ({focused}) => tabBarIcon(focused, route),
+          tabBarIcon: ({focused}) => tabBarIcon(focused, route, isDriver),
           tabBarActiveTintColor: Colors.Active,
           tabBarInactiveTintColor: Colors.Inactive,
         };
       }}>
       <Tab.Screen
         name="Home"
-        component={isDriver ? HomeDriver : Home}
-        options={{title: 'Trang chủ'}}
+        component={isDriver ? HistoryDriver : Home}
+        options={{title: isDriver ? 'Lịch trình' : 'Trang chủ'}}
       />
       <Tab.Screen
         name="History"
-        component={isDriver ? HistoryDriver : History}
+        component={isDriver ? ListTrip : History}
         options={{title: 'Lịch sử'}}
       />
       <Tab.Screen
@@ -84,18 +88,20 @@ export const BottomTabNavigator: React.FC = () => {
       />
     </Tab.Navigator>
   );
-  // } else {
-  //   return <HomeDriver />;
-  // }
 };
 
 const tabBarIcon = (
   focused: boolean,
   route: RouteProp<ParamListBase, string>,
+  isDriver: boolean,
 ) => {
   return (
     <Icon
-      name={IconsBottomTab[route.name]}
+      name={
+        isDriver
+          ? IconsBottomTab[route.name].driver
+          : IconsBottomTab[route.name].customer
+      }
       size={22}
       color={focused ? Colors.Active : Colors.Inactive}
     />

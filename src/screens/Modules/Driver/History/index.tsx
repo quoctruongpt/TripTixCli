@@ -47,11 +47,6 @@ export const HistoryDriver: React.FC = () => {
   const getHistory = async () => {
     try {
       setLoading(true);
-      // const time = dayjs(filter.time, {utc: true})
-      //   .set('hour', 0)
-      //   .set('minute', 0)
-      //   .add(7, 'hour')
-      //   .unix();
       const time = dayjs(filter.time).set('hour', 7).set('minute', 0).unix();
 
       const {data} = await getHistoryDriver(userInfo.idUserSystem, time);
@@ -89,6 +84,7 @@ export const HistoryDriver: React.FC = () => {
             renderButton={(title, onPress) => (
               <TouchableOpacity
                 onPress={onPress}
+                // disabled
                 style={{
                   backgroundColor: '#fafafa',
                   borderRadius: 8,
@@ -135,7 +131,7 @@ export const HistoryDriver: React.FC = () => {
               style={{width: 200, height: 200}}
             />
             <Text style={{textAlign: 'center'}}>
-              Bạn không có chuyến đi nào vào ngày này
+              Bạn không có chuyến đi nào vào hôm nay
             </Text>
           </View>
         }
