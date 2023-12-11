@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, Text, FlatList, RefreshControl} from 'react-native';
+import {View, Text, FlatList, RefreshControl, Image} from 'react-native';
 import {InfoItem} from '@screens/History/components/TicketItem';
 import {getHistoryTripDriver} from '@httpClient/trip.api';
 import {useStore} from '@store';
@@ -7,6 +7,7 @@ import {BookingStatusId} from '@constants/route';
 import {StatusApiCall} from '@constants/global';
 import dayjs from 'dayjs';
 import {BookingStatusLabel} from '@constants/route';
+import {getColorStatus} from '@screens/History/components/TichketHistory';
 
 type TScreenProps = {type: string};
 
@@ -31,10 +32,18 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
   });
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [refresh, setRefresh] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   const dataShow = useMemo(() => {
-    return groupByDay(data);
+    const list = groupByDay(data);
+    const hihi = list.sort((a, b) => {
+      const timeStampA = a.timestamp;
+      const timeStampB = b.timestamp;
+      return type === 'finished'
+        ? timeStampB - timeStampA
+        : timeStampA - timeStampB;
+    });
+    return hihi;
   }, [data]);
 
   useEffect(() => {
@@ -50,7 +59,9 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
       setLoading(true);
       const {data} = await getHistoryTripDriver(
         userInfo.idUserSystem,
-        BookingStatusId.Finish,
+        type === 'finished'
+          ? `${BookingStatusId.Finish},${BookingStatusId.Cancel}`
+          : `${BookingStatusId.Run},${BookingStatusId.Ready}`,
         configs.page,
         configs.pageSize,
       );
@@ -61,6 +72,12 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
         const list = data.data.map(item => ({
           ...item,
           day: dayjs.unix(item.startTimee).format('DD/MM/YYYY'),
+          timestamp: dayjs
+            .unix(item.startTimee)
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 0)
+            .unix(),
         }));
 
         setData(pre => [...pre, ...list]);
@@ -86,6 +103,7 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
     const data = Object.keys(object).map(item => ({
       day: item,
       data: object[item],
+      timestamp: object[item][0]?.timestamp,
     }));
 
     return data;
@@ -135,7 +153,13 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
                 <Text style={{fontSize: 18, fontWeight: 'bold', color: 'red'}}>
                   {dayjs.unix(item.startTimee).format('HH:mm')}
                 </Text>
-                <Text style={{fontSize: 16, fontWeight: '700', marginTop: 8}}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '700',
+                    marginTop: 8,
+                    color: getColorStatus(item.status),
+                  }}>
                   {BookingStatusLabel[item.status]}
                 </Text>
               </View>
@@ -171,6 +195,21 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
         onEndReachedThreshold={0.1}
         refreshControl={
           <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
+        }
+        ListEmptyComponent={() =>
+          refresh ? null : (
+            <View style={{marginTop: 100}}>
+              <Image
+                source={require('@assets/images/empty-bus.png')}
+                style={{width: '100%', height: 150, resizeMode: 'contain'}}
+              />
+              <Text style={{marginTop: 24, textAlign: 'center'}}>
+                {type === 'finished'
+                  ? 'Bạn chưa có chuyến đi nào đã hoàn thành'
+                  : 'Bạn không có chuyến đi nào sắp tới'}
+              </Text>
+            </View>
+          )
         }
       />
       {loading && (

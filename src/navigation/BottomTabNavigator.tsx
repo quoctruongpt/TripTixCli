@@ -64,7 +64,7 @@ export const BottomTabNavigator: React.FC = () => {
       <Tab.Screen
         name="Home"
         component={isDriver ? HistoryDriver : Home}
-        options={{title: isDriver ? 'Lịch trình' : 'Trang chủ'}}
+        options={{title: isDriver ? 'Hoạt động' : 'Trang chủ'}}
       />
       <Tab.Screen
         name="History"
