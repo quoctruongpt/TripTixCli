@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {timeStampToUtc} from '@utils/time';
 import {formatPrice} from '@utils/price';
+import {ScreenLoading} from '@components/Loading';
 
 export const TransactionHistory: React.FC = () => {
   const [data, setData] = useState([]);
@@ -96,7 +97,9 @@ export const TransactionHistory: React.FC = () => {
           <RefreshControl refreshing={isLoading} onRefresh={getTransaction} />
         }
         ListEmptyComponent={
-          !isLoading ? (
+          isLoading ? (
+            <ScreenLoading type="transaction" />
+          ) : (
             <View style={{alignItems: 'center'}}>
               <Image
                 source={require('@assets/images/transaction-empty.png')}
@@ -104,7 +107,7 @@ export const TransactionHistory: React.FC = () => {
               />
               <Text>Bạn chưa có giao dịch nào gần đây</Text>
             </View>
-          ) : null
+          )
         }
       />
     </SafeAreaView>

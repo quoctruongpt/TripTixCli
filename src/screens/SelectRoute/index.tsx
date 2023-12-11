@@ -29,6 +29,7 @@ import {Steps} from '@components/Steps';
 import {useStore} from '@store/index';
 import {DatePicker} from '@components/DatePicker';
 import {timeStampToUtc} from '@utils/time';
+import {ScreenLoading} from '@components/Loading';
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
@@ -308,17 +309,21 @@ export const SelectRoute: React.FC = () => {
           </TouchableOpacity>
         ))}
 
-        {dataRouteFilter.length <= 0 && (
-          <View style={{alignItems: 'center'}}>
-            <Image
-              source={require('@assets/images/notFound1.png')}
-              style={{width: 200, height: 200}}
-            />
-            <Text style={{textAlign: 'center', color: '#ccc'}}>
-              Không tìm thấy tuyến đường phù hợp
-            </Text>
-          </View>
-        )}
+        {dataRouteFilter.length <= 0 ? (
+          isLoading ? (
+            <ScreenLoading type="searchRoute" />
+          ) : (
+            <View style={{alignItems: 'center'}}>
+              <Image
+                source={require('@assets/images/notFound1.png')}
+                style={{width: 200, height: 200}}
+              />
+              <Text style={{textAlign: 'center', color: '#ccc'}}>
+                Không tìm thấy tuyến đường phù hợp
+              </Text>
+            </View>
+          )
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );

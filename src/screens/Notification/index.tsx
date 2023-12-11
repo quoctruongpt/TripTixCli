@@ -16,6 +16,7 @@ import {
 } from '@httpClient/notification.api';
 import {StatusApiCall} from '@constants/global';
 import dayjs from 'dayjs';
+import {ScreenLoading} from '@components/Loading';
 
 export const Notification: React.FC = () => {
   const [listNoti, setListNoti] = useState(null);
@@ -91,7 +92,7 @@ export const Notification: React.FC = () => {
         )}
         ListEmptyComponent={() => {
           if (loading) {
-            return null;
+            return <ScreenLoading type="notification" />;
           }
           return (
             <View>

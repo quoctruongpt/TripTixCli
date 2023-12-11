@@ -13,6 +13,7 @@ import {StatusApiCall} from '@constants/global';
 import {TicketItem} from '@screens/History/components/TicketItem';
 import {TicketDetail} from './components/TicketDetail';
 import dayjs from 'dayjs';
+import {ScreenLoading} from '@components/Loading';
 const utc = require('dayjs/plugin/utc');
 const timezone = require('dayjs/plugin/timezone');
 dayjs.extend(utc);
@@ -124,16 +125,20 @@ export const HistoryDriver: React.FC = () => {
             status={item.status}
           />
         )}
-        ListEmptyComponent={
-          <View style={{alignItems: 'center'}}>
-            <Image
-              source={require('@assets/images/empty.png')}
-              style={{width: 200, height: 200}}
-            />
-            <Text style={{textAlign: 'center'}}>
-              Bạn không có chuyến đi nào vào hôm nay
-            </Text>
-          </View>
+        ListEmptyComponent={() =>
+          loading ? (
+            <ScreenLoading />
+          ) : (
+            <View style={{alignItems: 'center'}}>
+              <Image
+                source={require('@assets/images/empty.png')}
+                style={{width: 200, height: 200}}
+              />
+              <Text style={{textAlign: 'center'}}>
+                Bạn không có chuyến đi nào vào hôm nay
+              </Text>
+            </View>
+          )
         }
       />
 

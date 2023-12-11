@@ -35,6 +35,7 @@ import {set} from 'mobx';
 import {TicketItem} from './TicketItem';
 import {Select} from '@components/Select';
 import {ConfigContext} from '@navigation';
+import {ScreenLoading} from '@components/Loading';
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
@@ -64,7 +65,12 @@ export const getStatusLabel = (status: string) => {
   return info.label;
 };
 
-export default function TichketHistory({listTicket, type, onRefresh}) {
+export default function TichketHistory({
+  listTicket,
+  type,
+  onRefresh,
+  isLoading,
+}) {
   const [data, setData] = useState([]);
   const [detail, setDetail] = useState<Record<string, any> | null>(null);
   const [canceling, setCanceling] = useState<string | null>(null);
@@ -155,27 +161,32 @@ export default function TichketHistory({listTicket, type, onRefresh}) {
         />
       )}
       {dataFilter.length === 0 ? (
-        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-          <Icon
-            name={`${
-              type == 'history' ? 'ticket-confirmation-outline' : 'ticket'
-            }`}
-            size={80}
-            style={{color: 'red'}}
-          />
-          <Text style={{color: 'orange'}}>
-            {statusFilter ? (
-              <Text style={{color: 'orange'}}>
-                Bạn không có chuyến đi nào ở trạng thái{' '}
-                <Text style={{color: 'red'}}>
-                  {BookingStatusLabel[statusFilter]}
+        isLoading ? (
+          <ScreenLoading />
+        ) : (
+          <View
+            style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+            <Icon
+              name={`${
+                type == 'history' ? 'ticket-confirmation-outline' : 'ticket'
+              }`}
+              size={80}
+              style={{color: 'red'}}
+            />
+            <Text style={{color: 'orange'}}>
+              {statusFilter ? (
+                <Text style={{color: 'orange'}}>
+                  Bạn không có chuyến đi nào ở trạng thái{' '}
+                  <Text style={{color: 'red'}}>
+                    {BookingStatusLabel[statusFilter]}
+                  </Text>
                 </Text>
-              </Text>
-            ) : (
-              'Lịch sử vé trống'
-            )}
-          </Text>
-        </View>
+              ) : (
+                'Lịch sử vé trống'
+              )}
+            </Text>
+          </View>
+        )
       ) : (
         <ScrollView style={{flex: 1, paddingBottom: 120, width: '100%'}}>
           {dataFilter &&

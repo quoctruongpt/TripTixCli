@@ -64,6 +64,7 @@ export const History: React.FC = () => {
               listTicket={listTicket}
               type={item}
               onRefresh={getHistory}
+              isLoading={isLoading}
             />
           )}
           pagingEnabled

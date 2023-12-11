@@ -8,6 +8,7 @@ import {StatusApiCall} from '@constants/global';
 import dayjs from 'dayjs';
 import {BookingStatusLabel} from '@constants/route';
 import {getColorStatus} from '@screens/History/components/TichketHistory';
+import {ScreenLoading} from '@components/Loading';
 
 type TScreenProps = {type: string};
 
@@ -32,7 +33,7 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
   });
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   const dataShow = useMemo(() => {
     const list = groupByDay(data);
@@ -197,7 +198,9 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
           <RefreshControl refreshing={refresh} onRefresh={handleRefresh} />
         }
         ListEmptyComponent={() =>
-          refresh ? null : (
+          refresh ? (
+            <ScreenLoading />
+          ) : (
             <View style={{marginTop: 100}}>
               <Image
                 source={require('@assets/images/empty-bus.png')}
