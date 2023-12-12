@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import {BookingStatusLabel} from '@constants/route';
 import {getColorStatus} from '@screens/History/components/TichketHistory';
 import {ScreenLoading} from '@components/Loading';
+import {timeStampToUtc} from '@utils/time';
 
 type TScreenProps = {type: string};
 
@@ -72,9 +73,8 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
 
         const list = data.data.map(item => ({
           ...item,
-          day: dayjs.unix(item.startTimee).format('DD/MM/YYYY'),
-          timestamp: dayjs
-            .unix(item.startTimee)
+          day: timeStampToUtc(item.startTimee).format('DD/MM/YYYY'),
+          timestamp: timeStampToUtc(item.startTimee)
             .set('hour', 0)
             .set('minute', 0)
             .set('second', 0)
@@ -152,7 +152,7 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
                 }}>
                 <Text>Giờ xuất bến</Text>
                 <Text style={{fontSize: 18, fontWeight: 'bold', color: 'red'}}>
-                  {dayjs.unix(item.startTimee).format('HH:mm')}
+                  {timeStampToUtc(item.startTimee).format('HH:mm')}
                 </Text>
                 <Text
                   style={{

@@ -31,6 +31,7 @@ export const OTP = () => {
   const params = useRoute<TAuthRoute<'OTP'>>().params || {};
 
   const [otp, setOtp] = useState('');
+  const [loading, setLoading] = useState(false);
   const {
     authentication: {setIsLogin},
   } = useStore();
@@ -64,15 +65,23 @@ export const OTP = () => {
 
   const handleVerify = async () => {
     try {
+      setLoading(true);
       const {data} = await postConfirmOtp(params.phone, otp);
       if (data.status === StatusApiCall.Success) {
         await handleRegister();
         return;
       }
     } catch (error) {
-      toast.show(error?.data?.data ?? 'Có lỗi xảy ra. Vui lòng thử lại', {
-        type: 'error',
-      });
+      toast.show(
+        error?.data?.data ??
+          error?.data?.message ??
+          'Có lỗi xảy ra. Vui lòng thử lại',
+        {
+          type: 'danger',
+        },
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,7 +158,7 @@ export const OTP = () => {
             buttonStyle={styles.buttonVertify}
             containerStyle={styles.buttonVertifyContainer}
             titleStyle={styles.titleButtonVertify}
-            disabled={otp.length !== 6}
+            disabled={otp.length !== 6 || loading}
           />
           <TouchableOpacity onPress={sendOtp} disabled={!!time}>
             <Text
