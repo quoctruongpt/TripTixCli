@@ -1,7 +1,11 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, FlatList, RefreshControl, Image} from 'react-native';
 import {InfoItem} from '@screens/History/components/TicketItem';
-import {getHistoryTripDriver} from '@httpClient/trip.api';
+import {
+  getHistoryTripDriver,
+  getHistoryRoleDriver,
+  getReadyRoleDriver,
+} from '@httpClient/trip.api';
 import {useStore} from '@store';
 import {BookingStatusId} from '@constants/route';
 import {StatusApiCall} from '@constants/global';
@@ -59,14 +63,18 @@ export const Screen: React.FC<TScreenProps> = ({type}) => {
   const getData = async () => {
     try {
       setLoading(true);
-      const {data} = await getHistoryTripDriver(
-        userInfo.idUserSystem,
+      const {data} =
         type === 'finished'
-          ? `${BookingStatusId.Finish},${BookingStatusId.Cancel}`
-          : `${BookingStatusId.Run},${BookingStatusId.Ready}`,
-        configs.page,
-        configs.pageSize,
-      );
+          ? await getHistoryRoleDriver(
+              userInfo.idUserSystem,
+              configs.page,
+              configs.pageSize,
+            )
+          : await getReadyRoleDriver(
+              userInfo.idUserSystem,
+              configs.page,
+              configs.pageSize,
+            );
 
       if (data.status === StatusApiCall.Success) {
         changeConfig({totalPage: data.totalPage});

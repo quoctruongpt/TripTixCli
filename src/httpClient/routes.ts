@@ -32,6 +32,8 @@ const routes = {
     confirmFinishTrip: url.baseUrl + '/trips/confirm-finish-trip-by-driver',
     getSearchTrip: url.baseUrl + '/trips/search',
     historyTripDriver: url.baseUrl + '/trips/history-driver',
+    driverHistory: url.baseUrl + '/trips/trip-ready-of-driver',
+    driverReady: url.baseUrl + '/trips/trip-finish-cancel-of-driver',
   },
   payment: {
     topUp: url.baseUrl + '/payment/create_payment-url',

@@ -110,6 +110,25 @@ const getHistoryTripDriver = (
   );
 };
 
+const getHistoryRoleDriver = (
+  driverId: number,
+  page: number,
+  totalPage: number,
+) => {
+  return httpClient.get(
+    `${routes.trip.driverHistory}?driverId=${driverId}&pageIndex=${page}&pageSize=${totalPage}`,
+  );
+};
+const getReadyRoleDriver = (
+  driverId: number,
+  page: number,
+  totalPage: number,
+) => {
+  return httpClient.get(
+    `${routes.trip.driverReady}?driverId=${driverId}&pageIndex=${page}&pageSize=${totalPage}`,
+  );
+};
+
 export {
   getTrips,
   getRouteInfo,
@@ -125,4 +144,6 @@ export {
   getSearchTrips,
   getHistoryTripDriver,
   postBookTicketRound,
+  getHistoryRoleDriver,
+  getReadyRoleDriver,
 };
