@@ -21,15 +21,29 @@ const SeatStatus = {
 export const SelectSeat: React.FC = () => {
   const navigation = useNavigation<TAppNavigation<'SelectSeat'>>();
   const {
-    route: {routeInfo, setSeatSelected, setUserInformation},
+    route: {
+      routeInfo: route,
+      setSeatSelected,
+      setUserInformation,
+      routeRoundInfo,
+      seatSelected,
+      seatSelectedRound,
+    },
     authentication: {userInfo, config},
   } = useStore();
   const maxSeat = config?.maxSeat ?? 5;
 
-  const {fromId, toId} = useRoute<TAppRoute<'SelectSeat'>>().params || {};
+  const {fromId, toId, isRound} =
+    useRoute<TAppRoute<'SelectSeat'>>().params || {};
+  const routeInfo = isRound ? routeRoundInfo : route;
   const [listSelectSeat, setListSelectSeat] = useState([]);
   const [showError, setShowError] = useState(false);
   const toast = useToast();
+  console.log(routeInfo);
+
+  useEffect(() => {
+    setListSelectSeat((isRound ? seatSelectedRound : seatSelected) ?? []);
+  }, [isRound]);
 
   const onActiveSeat = seat => {
     const seatId = seat.seatName;
@@ -49,7 +63,7 @@ export const SelectSeat: React.FC = () => {
   };
 
   const onDepartureInfo = () => {
-    setSeatSelected(listSelectSeat);
+    setSeatSelected(listSelectSeat, {isRound});
     const pickUp = routeInfo.listtripStopDTO.find(item => item.index === 0);
     const dropOff = routeInfo.listtripStopDTO.find(item => item.index === 1);
     setUserInformation({
@@ -58,10 +72,13 @@ export const SelectSeat: React.FC = () => {
       name: userInfo.fullName,
       phone: userInfo.phone,
     });
-    navigation.navigate('DepartureInformation', {fromId, toId});
+    navigation.navigate('DepartureInformation', {
+      fromId: isRound ? toId : fromId,
+      toId: isRound ? fromId : toId,
+    });
   };
 
-  const selectedSeatsText = listSelectSeat.join(', ');
+  const selectedSeatsText = listSelectSeat?.join(', ');
 
   const numberFloor = routeInfo.busDTO?.floor;
 
@@ -118,7 +135,7 @@ export const SelectSeat: React.FC = () => {
                     key={index3}
                     seatName={seat.seatName}
                     seatAvailable={seat.status == SeatStatus.Available}
-                    selected={listSelectSeat.includes(seat.seatName)}
+                    selected={listSelectSeat?.includes(seat.seatName)}
                     onSeatPress={() => onActiveSeat(seat)}
                   />
                 ))}
@@ -177,7 +194,7 @@ export const SelectSeat: React.FC = () => {
             <Text style={{marginBottom: 10, color: 'red'}}>
               {selectedSeatsText}
             </Text>
-            <Text>{formatPrice(listSelectSeat.length * routeInfo.fare)}</Text>
+            <Text>{formatPrice(listSelectSeat?.length * routeInfo.fare)}</Text>
           </View>
         </View>
       </View>

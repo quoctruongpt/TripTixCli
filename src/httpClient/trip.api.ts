@@ -45,6 +45,20 @@ const postBookTicket = (data: {
   nameGuest: string;
 }) => httpClient.post(routes.trip.postBookTicket, data);
 
+const postBookTicketRound = (data: {
+  idTrip: number;
+  idCustomer: number;
+  codePickUpPoint: number;
+  codeDropOffPoint: number;
+  seatName: string[];
+  phoneGuest: string;
+  nameGuest: string;
+  idTrip2: number;
+  codePickUpPoint2: number;
+  codeDropOffPoint2: number;
+  seatName2: string[];
+}) => httpClient.post(routes.trip.postBookTicketRound, data);
+
 const getBookings = (idCustomer: number) =>
   httpClient.get(`${routes.trip.getBooking}?idCustomer=${idCustomer}`);
 
@@ -110,4 +124,5 @@ export {
   putConfirmSuccessTrip,
   getSearchTrips,
   getHistoryTripDriver,
+  postBookTicketRound,
 };

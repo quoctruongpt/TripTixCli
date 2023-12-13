@@ -1,5 +1,5 @@
-import { RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import {RouteProp} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type TAppStackParamList = {
   BottomTabNavigator: undefined;
@@ -8,7 +8,14 @@ type TAppStackParamList = {
   Settings: undefined;
   Point: undefined;
   Info: undefined;
-  SelectRoute: { fromId: string; toId: string };
+  SelectRoute: {
+    fromId: string;
+    toId: string;
+    isRound?: boolean;
+    dateDefault?: number;
+    priceDefault?: any;
+    typeDefault?: any;
+  };
   SelectSeat: undefined;
   SearchRoute: undefined;
   DepartureInformation: undefined;
@@ -18,6 +25,15 @@ type TAppStackParamList = {
   DetailRoute: undefined;
   TransactionHistory: undefined;
   News: undefined;
+  SelectRouteRoundTrip: {
+    fromId: string;
+    toId: string;
+    isRound?: boolean;
+    dateDefault?: number;
+    priceDefault?: any;
+    typeDefault?: any;
+  };
+  SelectSeatRoundTrip: undefined;
 };
 
 type TAppNavigation<T extends keyof TAppStackParamList> =
@@ -28,4 +44,4 @@ type TAppRoute<T extends keyof TAppStackParamList> = RouteProp<
   T
 >;
 
-export type { TAppStackParamList, TAppNavigation, TAppRoute };
+export type {TAppStackParamList, TAppNavigation, TAppRoute};

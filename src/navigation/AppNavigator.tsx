@@ -52,6 +52,16 @@ export default function AppNavigator() {
         options={{title: 'Vui lòng chọn ghế'}}
       />
       <Stack.Screen
+        name={'SelectRouteRoundTrip'}
+        component={SelectRoute}
+        options={{title: 'Chọn chuyến'}}
+      />
+      <Stack.Screen
+        name={'SelectSeatRoundTrip'}
+        component={SelectSeat}
+        options={{title: 'Vui lòng chọn ghế'}}
+      />
+      <Stack.Screen
         name={'Settings'}
         component={Settings}
         options={{title: 'Đổi mật khẩu'}}

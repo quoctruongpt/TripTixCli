@@ -36,17 +36,24 @@ dayjs.extend(utc);
 export const SelectRoute: React.FC = () => {
   const toast = useToast();
   const {
-    route: {setRouteInfo},
+    route: {setRouteInfo, clear},
     authentication: {
       userInfo: {coins},
     },
   } = useStore();
+  const {fromId, toId, isRound, dateDefault, priceDefault, typeDefault} =
+    useRoute<TAppRoute<'SelectRoute'>>().params;
+
+  const minDate = dateDefault ? new Date(dateDefault * 1000) : new Date();
 
   const navigation = useNavigation<TAppNavigation<'SelectRoute'>>();
-  const [dateSelected, setDateSelected] = useState<Date>(new Date());
+  const [dateSelected, setDateSelected] = useState<Date>(minDate);
   const [dataRoute, setDataRoute] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filter, setFilter] = useState({price: null, type: null, time: null});
+  const [filter, setFilter] = useState({
+    price: priceDefault,
+    type: typeDefault,
+  });
 
   const dataRouteFilter = useMemo(() => {
     const dataFilterByType = dataRoute.filter(item =>
@@ -61,16 +68,23 @@ export const SelectRoute: React.FC = () => {
     return dataFilterByType;
   }, [filter, dataRoute]);
 
-  const {fromId, toId} = useRoute<TAppRoute<'SelectRoute'>>().params;
-
   const handleChooseRoute = item => {
-    setRouteInfo(item);
-    navigation.navigate('SelectSeat', {fromId, toId});
+    if (!isRound) {
+      // clearRound();
+      clear();
+    }
+    setRouteInfo(item, {isRound});
+
+    navigation.navigate(isRound ? 'SelectSeatRoundTrip' : 'SelectSeat', {
+      fromId,
+      toId,
+      isRound,
+    });
   };
 
   useEffect(() => {
     handleGetTrips();
-  }, [dateSelected]);
+  }, [dateSelected, fromId, toId]);
 
   const updateFilter = (data: any) => {
     setFilter(pre => ({...pre, ...data}));
@@ -153,7 +167,7 @@ export const SelectRoute: React.FC = () => {
               value={dateSelected}
               onConfirm={date => setDateSelected(date)}
               placeholder="Birthday"
-              minimumDate={new Date()}
+              minimumDate={minDate}
               renderButton={(title, onPress) => (
                 <TouchableOpacity
                   onPress={onPress}

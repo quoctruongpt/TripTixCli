@@ -20,13 +20,19 @@ import {timeStampToUtc} from '@utils/time';
 import {Steps} from '@components/Steps';
 import {PopupError} from './components/PopupError';
 import {TAppRoute} from 'navigation/AppNavigator.type';
-import {postBookTicket} from '@httpClient/trip.api';
+import {postBookTicket, postBookTicketRound} from '@httpClient/trip.api';
 
 export const TicketInformation: React.FC = () => {
   const navigation = useNavigation<TAppNavigation<'TicketInformation'>>();
   const toast = useToast();
   const {
-    route: {routeInfo, userInformation, seatSelected},
+    route: {
+      routeInfo,
+      userInformation,
+      seatSelected,
+      routeRoundInfo,
+      seatSelectedRound,
+    },
     authentication: {userInfo, synchUserInfo},
   } = useStore();
   const [confirmCancel, setConfirmCancel] = useState(false);
@@ -40,35 +46,73 @@ export const TicketInformation: React.FC = () => {
     });
   }, []);
 
+  const isRound = !!routeRoundInfo;
+
   const pickup = routeInfo.listtripStopDTO.find(
     item => String(item.id) === String(userInformation.pickUpId),
   );
   const dropOff = routeInfo.listtripStopDTO.find(
     item => String(item.id) === String(userInformation.dropOffId),
   );
+  const pickupRound = routeRoundInfo?.listtripStopDTO.find(
+    item => String(item.id) === String(userInformation.pickUpIdRound),
+  );
+  const dropOffRound = routeRoundInfo?.listtripStopDTO.find(
+    item => String(item.id) === String(userInformation.dropOffIdRound),
+  );
 
   const listOfPassingStations = routeInfo.listtripStopDTO.filter(item => {
     return item.index >= pickup.index && item.index <= dropOff.index;
   });
+  const listOfPassingStationsRound = routeRoundInfo?.listtripStopDTO.filter(
+    item => {
+      return (
+        item.index >= pickupRound.index && item.index <= dropOffRound.index
+      );
+    },
+  );
 
-  const totalPrice =
-    listOfPassingStations.reduce((accumulator, currentValue) => {
+  const price = listOfPassingStations.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.costsIncurred;
+  }, 0);
+  const totalPrice = price * seatSelected.length;
+  const priceRound = listOfPassingStationsRound?.reduce(
+    (accumulator, currentValue) => {
       return accumulator + currentValue.costsIncurred;
-    }, 0) * seatSelected.length;
+    },
+    0,
+  );
+  const totalPriceRound = isRound ? priceRound * seatSelectedRound?.length : 0;
 
   const handlePayment = async () => {
     try {
       setLoading(true);
-      const params = {
-        idTrip: routeInfo.idTrip,
-        idCustomer: userInfo.idUserSystem,
-        codePickUpPoint: pickup.id,
-        codeDropOffPoint: dropOff.id,
-        seatName: seatSelected,
-        phoneGuest: userInformation.phone,
-        nameGuest: userInformation.name,
-      };
-      const {data} = await postBookTicket(params);
+      const params = isRound
+        ? {
+            idTrip: routeInfo.idTrip,
+            idCustomer: userInfo.idUserSystem,
+            codePickUpPoint: pickup.id,
+            codeDropOffPoint: dropOff.id,
+            seatName: seatSelected,
+            idTrip2: routeRoundInfo.idTrip,
+            codePickUpPoint2: pickupRound.id,
+            codeDropOffPoint2: dropOffRound.id,
+            seatName2: seatSelectedRound,
+            phoneGuest: userInformation.phone,
+            nameGuest: userInformation.name,
+          }
+        : {
+            idTrip: routeInfo.idTrip,
+            idCustomer: userInfo.idUserSystem,
+            codePickUpPoint: pickup.id,
+            codeDropOffPoint: dropOff.id,
+            seatName: seatSelected,
+            phoneGuest: userInformation.phone,
+            nameGuest: userInformation.name,
+          };
+      const {data} = isRound
+        ? await postBookTicketRound(params)
+        : await postBookTicket(params);
 
       if (data.status === StatusApiCall.Success) {
         synchUserInfo();
@@ -89,8 +133,13 @@ export const TicketInformation: React.FC = () => {
 
       throw new Error(data.data);
     } catch (error: any) {
+      console.log(error);
+
       setErrorMessage(
-        error.response?.data?.data || error.message || 'Lỗi không xác định',
+        error.response?.data?.data ||
+          error?.data?.message ||
+          error.message ||
+          'Lỗi không xác định',
       );
     } finally {
       setLoading(false);
@@ -129,7 +178,7 @@ export const TicketInformation: React.FC = () => {
           ]}
         />
         <Box
-          title="Thông tin chuyến xe"
+          title="Thông tin chuyến xe - Chiều đi"
           data={[
             {
               label: 'Tuyến',
@@ -146,11 +195,38 @@ export const TicketInformation: React.FC = () => {
               ),
             },
             {label: 'Số vé', value: seatSelected.length},
+            {label: 'Đơn giá', value: formatPrice(price)},
             {label: 'Số ghế', value: seatSelected.join(' ,')},
             {label: 'Điểm đón', value: pickup?.title},
             {label: 'Điểm trả', value: dropOff?.title},
           ]}
         />
+        {!!routeRoundInfo && (
+          <Box
+            title="Thông tin chuyến xe - Chiều về"
+            data={[
+              {
+                label: 'Tuyến',
+                value: `${routeRoundInfo.routeDTO.departurePoint} - ${routeRoundInfo.routeDTO.destination}`,
+              },
+              {
+                label: 'Nhà xe',
+                value: `${routeRoundInfo.busDTO.name}`,
+              },
+              {
+                label: 'Thời gian',
+                value: timeStampToUtc(routeRoundInfo?.startTimee).format(
+                  'HH:mm - DD/MM/YYYY',
+                ),
+              },
+              {label: 'Số vé', value: seatSelectedRound.length},
+              {label: 'Đơn giá', value: formatPrice(priceRound)},
+              {label: 'Số ghế', value: seatSelectedRound.join(' ,')},
+              {label: 'Điểm đón', value: pickupRound?.title},
+              {label: 'Điểm trả', value: dropOffRound?.title},
+            ]}
+          />
+        )}
         <View style={{flex: 1, backgroundColor: '#fff', padding: 16}}>
           <Text
             style={{
@@ -167,11 +243,14 @@ export const TicketInformation: React.FC = () => {
               borderRadius: 12,
             }}>
             <Item label="Giá" value={formatPrice(totalPrice)} />
+            {!!routeRoundInfo && (
+              <Item label="Khứ hồi" value={formatPrice(totalPriceRound)} />
+            )}
             <Item label="Khuyễn mại" value="0đ" />
             <Divider style={{marginVertical: 12}} />
             <Item
               label="Thành tiền"
-              value={formatPrice(totalPrice)}
+              value={formatPrice(totalPrice + totalPriceRound)}
               styleValue={{fontSize: 16, fontWeight: '700'}}
             />
           </View>
