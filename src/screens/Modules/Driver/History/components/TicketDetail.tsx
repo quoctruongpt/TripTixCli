@@ -53,7 +53,10 @@ export const TicketDetail = ({
         name: item.type === 'DROPOFF' ? 'location-on' : 'location-searching',
         color: 'red',
       },
-      desc: total > 0 ? `Có ${total} khách hàng xuống trạm` : '',
+      desc:
+        total > 0
+          ? `Có ${total} khách hàng xuống trạm`
+          : 'Không có khách hàng nào xuống trạm này',
     };
   });
 
