@@ -103,8 +103,94 @@ const SearchRouteLoading: React.FC = () => {
   );
 };
 
-type Props = {type?: 'notification' | 'transaction' | 'searchRoute'};
-export const ScreenLoading: React.FC<Props> = ({type}) => {
+const BannerLoading: React.FC = () => {
+  return (
+    <View
+      style={{
+        padding: 16,
+        backgroundColor: '#fff',
+        marginBottom: 24,
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+      }}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Skeleton style={{marginBottom: 8}} width={50} height={16} />
+        <Skeleton style={{marginBottom: 8}} width={50} height={16} />
+      </View>
+      <Skeleton style={{marginBottom: 6}} width={'70%'} height={20} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginBottom: 20,
+        }}>
+        <Skeleton style={{marginRight: 20}} width={'20%'} height={50} />
+        <Skeleton width={'60%'} height={50} />
+      </View>
+
+      <Skeleton width={50} height={10} />
+    </View>
+  );
+};
+
+const ListNewsLoading: React.FC = () => {
+  return (
+    <View
+      style={{
+        paddingVertical: 16,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+      }}>
+      <View style={{flexDirection: 'row'}}>
+        <Skeleton
+          style={{borderRadius: 12, marginRight: 8}}
+          width={70}
+          height={70}
+        />
+        <View style={{flex: 1}}>
+          <Skeleton style={{marginBottom: 8}} height={20} />
+          <Skeleton style={{marginBottom: 4}} width={'30%'} height={10} />
+          <Skeleton style={{marginBottom: 4}} width={'80%'} height={10} />
+          <Skeleton height={10} />
+        </View>
+      </View>
+    </View>
+  );
+};
+const NewsLoading: React.FC = () => {
+  return (
+    <View
+      style={{
+        padding: 16,
+        backgroundColor: '#fff',
+        marginBottom: 24,
+        borderBottomWidth: 1,
+        borderColor: '#ccc',
+      }}>
+      <Skeleton
+        style={{borderTopRightRadius: 20, borderTopLeftRadius: 20}}
+        height={100}
+      />
+      <Skeleton style={{marginVertical: 8}} height={20} />
+      <Skeleton style={{marginBottom: 4}} width={'30%'} height={10} />
+      <Skeleton style={{marginBottom: 4}} width={'80%'} height={10} />
+      <Skeleton height={10} />
+    </View>
+  );
+};
+
+type Props = {
+  type?:
+    | 'notification'
+    | 'transaction'
+    | 'searchRoute'
+    | 'banner'
+    | 'listNews'
+    | 'news';
+  length?: number;
+};
+export const ScreenLoading: React.FC<Props> = ({type, length = 10}) => {
   const render = () => {
     switch (type) {
       case 'notification':
@@ -113,13 +199,19 @@ export const ScreenLoading: React.FC<Props> = ({type}) => {
         return <TransactionLoading />;
       case 'searchRoute':
         return <SearchRouteLoading />;
+      case 'banner':
+        return <BannerLoading />;
+      case 'listNews':
+        return <ListNewsLoading />;
+      case 'news':
+        return <NewsLoading />;
       default:
         return <Loading />;
     }
   };
   return (
     <>
-      {Array.from({length: 10}).map((item, index) => (
+      {Array.from({length}).map((item, index) => (
         <View key={index}>{render()}</View>
       ))}
     </>

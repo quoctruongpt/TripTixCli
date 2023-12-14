@@ -7,6 +7,7 @@ import {StatusApiCall} from '@constants/global';
 import {useNavigation} from '@react-navigation/native';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
 import Carousel from 'react-native-snap-carousel';
+import {ScreenLoading} from '@components/Loading';
 
 const {width} = Dimensions.get('screen');
 const banner = [
@@ -18,6 +19,7 @@ const banner = [
 export const Banner: React.FC = () => {
   const [data, setData] = useState([]);
   const navigation = useNavigation<TAppNavigation<'Home'>>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getData();
@@ -31,6 +33,7 @@ export const Banner: React.FC = () => {
         setData(data.data?.slice(0, 3));
       }
     } finally {
+      setLoading(false);
     }
   };
 
@@ -77,6 +80,9 @@ export const Banner: React.FC = () => {
             <Text style={{color: '#e4613b'}}>Xem tất cả</Text>
           </TouchableOpacity>
         </View>
+        {loading && data.length < 1 && (
+          <ScreenLoading type="listNews" length={3} />
+        )}
         {data.map((item, index) => {
           return (
             <Item
