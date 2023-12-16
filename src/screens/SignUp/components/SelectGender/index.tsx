@@ -31,6 +31,8 @@ export const SelectGender: React.FC<{
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             title={item.label}
+            checkedColor="orange"
+            textStyle={{fontFamily:'SVN-Gilroy-Medium'}}
           />
         ))}
       </View>

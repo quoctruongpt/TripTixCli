@@ -42,7 +42,7 @@ dayjs.extend(utc);
 export const getColorStatus = (status: string) => {
   switch (status) {
     case BookingStatusId.Cancel:
-      return 'red';
+      return '#EE0000';
     case BookingStatusId.Paid:
     case BookingStatusId.Ready:
     case BookingStatusId.Checkin:

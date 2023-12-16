@@ -37,14 +37,14 @@ export const PayBox: React.FC<{ coins: number; voucherCoins: number }> = ({
     >
       <View style={{ flexDirection: "row" }}>
         <View style={{ flex: 1, borderRightWidth: 1, borderColor: "#dde2e8" }}>
-          <Text>Số dư</Text>
-          <Text style={{ fontWeight: "700" }}>
+          <Text style={{ fontFamily:"SVN-Gilroy-Medium" }}>Số dư</Text>
+          <Text style={{ fontFamily:"SVN-Gilroy-XBold" }}>
             {coins.toLocaleString("en-US")} xu
           </Text>
         </View>
         <View style={{ flex: 1, alignItems: "flex-end" }}>
-          <Text>Tài khoản khuyến mại</Text>
-          <Text style={{ fontWeight: "700" }}>
+          <Text style={{ fontFamily:"SVN-Gilroy-Medium" }}>Tài khoản khuyến mại</Text>
+          <Text style={{ fontFamily:"SVN-Gilroy-XBold" }}>
             {voucherCoins.toLocaleString("en-US")} xu
           </Text>
         </View>

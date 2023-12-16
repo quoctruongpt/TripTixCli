@@ -194,8 +194,8 @@ export const DepartureInformation: React.FC = observer(() => {
               CarTypes[routeInfo.busDTO.type]
             }`}
             containerStyle={{flexDirection: 'row'}}
-            buttonStyle={{backgroundColor: '#ccc'}}
-            titleStyle={{fontWeight: '700', color: '#000'}}
+            buttonStyle={{backgroundColor: 'black'}}
+            titleStyle={{fontFamily: 'SVN-Gilroy-Bold', color: 'orange'}}
           />
         </View> */}
         <Box
@@ -258,10 +258,10 @@ export const DepartureInformation: React.FC = observer(() => {
             name="name"
             render={({field: {value, onChange}}) => (
               <Input
-                label="Thông tin khách"
+                label={<Text style={{fontFamily: 'SVN-Gilroy-SemiBold'}}>Thông tin khách</Text>} 
                 value={value}
                 onChangeText={onChange}
-                inputStyle={{fontSize: 16}}
+                inputStyle={{fontSize: 16,fontFamily:'SVN-Gilroy-Bold'}}
                 editable={userInfo.role === EAccountType.Staff}
               />
             )}
@@ -275,6 +275,7 @@ export const DepartureInformation: React.FC = observer(() => {
                 onChangeText={onChange}
                 inputStyle={{fontSize: 16}}
                 editable={userInfo.role === EAccountType.Staff}
+                style={{fontFamily:'SVN-Gilroy-Bold'}}
               />
             )}
           />
@@ -282,12 +283,13 @@ export const DepartureInformation: React.FC = observer(() => {
         <View style={[styles.box, {flex: 1}]} />
       </KeyboardAwareScrollView>
       <ButtonApp
-        title="Continue"
+        title="Tiếp tục"
         onPress={handleSubmit(handleConfirm)}
         buttonStyle={{
-          backgroundColor: 'red',
+          backgroundColor: 'orange',
           margin: 10,
         }}
+        titleStyle={{color:'black'}}
         disabled={!isValid}
       />
     </SafeAreaView>
@@ -339,11 +341,24 @@ const Box: React.FC<TBox> = ({
           <Text style={{color: 'red'}}>Huỷ</Text>
         </TouchableOpacity>
       )}
-      <Text style={{fontSize: 20, fontWeight: '900'}}>{title}</Text>
+       <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 120,
+                backgroundColor: '#DEDEDE',
+                paddingVertical: 6,
+                borderRadius: 20,
+              }}>
+              <Text style={{color: 'black', fontFamily: 'SVN-Gilroy-SemiBold',fontSize:15}}>{title}</Text>
+            </View>
+          </View>
       <Steps data={steps} showPrice />
       <View style={{flexDirection: 'row', marginTop: 12}}>
         <View style={{flex: 1, marginRight: 4}}>
-          <Text>Thời gian</Text>
+          <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Thời gian</Text>
           <Text style={styles.value}>{time}</Text>
         </View>
         <View style={{flex: 1, marginLeft: 4}}>
@@ -353,7 +368,7 @@ const Box: React.FC<TBox> = ({
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Text>Số ghế đã chọn</Text>
+            <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Số ghế đã chọn</Text>
             <TouchableOpacity onPress={onChooseAgain}>
               <Text style={{fontSize: 10, color: 'orange'}}>Chọn lại</Text>
             </TouchableOpacity>
@@ -363,7 +378,7 @@ const Box: React.FC<TBox> = ({
       </View>
       <View style={{flexDirection: 'row', marginTop: 12}}>
         <View style={{flex: 1, marginRight: 4}}>
-          <Text>Điểm đón: (*)</Text>
+          <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Điểm đón: (*)</Text>
           <Controller
             control={control}
             name={pickupName}
@@ -401,7 +416,7 @@ const Box: React.FC<TBox> = ({
           />
         </View>
         <View style={{flex: 1, marginLeft: 4}}>
-          <Text>Điểm đến: (*)</Text>
+          <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Điểm đến: (*)</Text>
           <Controller
             control={control}
             name={dropOffName}
@@ -445,5 +460,5 @@ const Box: React.FC<TBox> = ({
 
 const styles = StyleSheet.create({
   box: {padding: 16, backgroundColor: '#fff', marginBottom: 16},
-  value: {fontSize: 16, fontWeight: '700', lineHeight: 24},
+  value: {fontSize: 16, fontFamily: 'SVN-Gilroy-Bold', lineHeight: 24},
 });

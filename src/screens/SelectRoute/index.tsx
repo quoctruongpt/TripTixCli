@@ -96,7 +96,7 @@ export const SelectRoute: React.FC = () => {
     }
 
     if (index === length - 1) {
-      return {name: 'location-on', color: 'red'};
+      return {name: 'location-on', color: 'orange'};
     }
 
     return {name: 'location-searching', color: 'orange'};
@@ -161,6 +161,7 @@ export const SelectRoute: React.FC = () => {
             justifyContent: 'center',
             flexDirection: 'row',
             paddingHorizontal: 5,
+            
           }}>
           <View style={{width: '30%', marginRight: 5, marginVertical: 12}}>
             <DatePicker
@@ -207,6 +208,7 @@ export const SelectRoute: React.FC = () => {
           flex: 1,
           padding: 0,
           zIndex: -1,
+          backgroundColor:'#DEDEDE'
         }}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={handleGetTrips} />
@@ -220,9 +222,13 @@ export const SelectRoute: React.FC = () => {
                 width: '100%',
                 shadowColor: '#000000',
                 padding: 10,
-                borderTopWidth: 1,
+                // borderTopWidth: 1,
                 borderColor: 'gray',
                 backgroundColor: coins >= d.fare ? '#fff' : '#fff7f5',
+                borderRadius:20,
+                marginBottom:5,
+                marginTop:15
+                
               }}>
               <View
                 style={{
@@ -235,7 +241,7 @@ export const SelectRoute: React.FC = () => {
                     justifyContent: 'flex-start',
                     flexDirection: 'row',
                   }}>
-                  <Text style={{fontWeight: '700'}}>
+                  <Text style={{fontFamily: 'SVN-Gilroy-SemiBold'}}>
                     {`${timeStampToUtc(d.startTimee).format(
                       'HH:mm',
                     )} - ${timeStampToUtc(d.endTimee).format('HH:mm')}`}
@@ -265,20 +271,7 @@ export const SelectRoute: React.FC = () => {
                   {d.subTrip}
                 </Text>
               )}
-              <View style={{alignItems: 'flex-start'}}>
-                <View
-                  style={{
-                    marginTop: 5,
-                    padding: 5,
-                    backgroundColor: '#f0f1f3',
-                    borderRadius: 20,
-                  }}>
-                  <Text style={{fontWeight: '700'}}>
-                    {formatPrice(d.fare)} - {CarTypes[d.busDTO.type]} - Còn{' '}
-                    {d.availableSeat} chỗ trống
-                  </Text>
-                </View>
-              </View>
+              
 
               <Steps
                 data={[
@@ -286,7 +279,23 @@ export const SelectRoute: React.FC = () => {
                   d?.listtripStopDTO[d?.listtripStopDTO.length - 1],
                 ]}
               />
-              <Text
+             <View style={{alignItems: 'flex-start'}}>
+              <View
+                  style={{
+                    marginTop: 5,
+                    padding: 5,
+                    backgroundColor: '#DEDEDE',
+                    borderRadius: 15,
+                    
+                    
+                  }}>
+                  <Text style={{padding:2, fontSize:15, fontFamily: 'SVN-Gilroy-Medium',color:'black'}}>
+                    {formatPrice(d.fare)} - {CarTypes[d.busDTO.type]} - Còn{' '}
+                    {d.availableSeat} chỗ trống
+                  </Text>
+                </View>
+              </View>
+              {/* <Text
                 style={{
                   marginLeft: 35,
                   marginTop: 10,
@@ -294,7 +303,7 @@ export const SelectRoute: React.FC = () => {
                   color: '#FF8C00',
                 }}>
                 {d.busDTO.description}
-              </Text>
+              </Text> */}
             </View>
             {d.fare > coins && (
               <View

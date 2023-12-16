@@ -153,7 +153,7 @@ export const TopUP: React.FC = () => {
             </View>
             <View style={styles.noteWrap}>
               <View style={styles.noteDot} />
-              <Text>
+              <Text >
                 Giới hạn giao dịch: trong khoảng 100,000đ đến 5,000,000đ
               </Text>
             </View>
@@ -187,6 +187,7 @@ export const TopUP: React.FC = () => {
             disabled={!isValid}
             onPress={handleSubmit(handleTopUp)}
             loading={isLoading}
+            color='#ff9434'
           />
         </View>
         {!!link && (

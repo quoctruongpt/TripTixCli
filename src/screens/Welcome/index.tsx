@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {ImageBackground, StyleSheet, View,} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Image} from 'react-native';
 import {Button, Text} from '@rneui/themed';
@@ -16,10 +16,8 @@ export const Welcome = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text h4 h4Style={styles.text}>
-        Chào mừng bạn đến TripTix
-      </Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      
+      {/* <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <View
           style={{
             borderRadius: 200,
@@ -29,6 +27,16 @@ export const Welcome = () => {
           }}>
           <Image source={Images.IconApp} style={styles.image} />
         </View>
+      </View> */}
+      <ImageBackground source={Images.IconApp} style={styles.image}></ImageBackground>
+      <View style={{flex:0.30,justifyContent:'center',alignItems:'center'}}>
+      <Text style={{fontFamily:'SVN-Gilroy-XBold',fontSize:24, color:'#1F2937'}}>
+          Chào mừng
+      </Text>
+      <Text style={{fontFamily:'SVN-Gilroy-Regular',fontSize:15, color:'gray',paddingLeft: 30,paddingRight:30,textAlign:'center'}}>
+      Chuyến đi trở nên dễ dàng, an toàn và thuận tiện. Để trãi nghiệm ứng dụng tìm kiếm chuyến đi ,vui lòng bắt đầu và đăng kí
+      </Text>
+      
       </View>
       <Button
         title="Bắt đầu"
@@ -37,6 +45,7 @@ export const Welcome = () => {
         titleStyle={styles.titleButton}
         onPress={handlePressStart}
       />
+      
     </SafeAreaView>
   );
 };
@@ -44,23 +53,24 @@ export const Welcome = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 40,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
+    // backgroundColor: '#fee5c9',
+
   },
-  text: {fontWeight: '700', color: '#2EE201'},
-  image: {width: '100%', flex: 1, resizeMode: 'contain'},
+  image: {width: '100%',height:'110%',flex:0.65,backgroundColor:'#FFFFFF', resizeMode: 'contain',borderBottomRightRadius:15,borderBottomLeftRadius:15},
   button: {
-    backgroundColor: '#F5A522',
+    backgroundColor: '#FEEAD3',
     borderWidth: 2,
-    borderColor: 'white',
-    borderRadius: 30,
-    padding: 12,
+    borderRadius: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#FE5D26',    
   },
   buttonContainer: {
-    width: '100%',
+    width: '75%',
     marginHorizontal: 50,
     marginVertical: 10,
   },
-  titleButton: {fontWeight: 'bold'},
+  titleButton: {fontFamily: 'SVN-Gilroy-SemiBold',color:'#FE5D26'}
 });

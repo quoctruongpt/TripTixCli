@@ -38,18 +38,35 @@ export const TicketItem: React.FC<{
   const getBackground = (status: string) => {
     switch (status) {
       case BookingStatusId.Cancel:
-        return '#f5bfce';
+        return '#ffe4ec';
       case BookingStatusId.Paid:
       case BookingStatusId.Ready:
       case BookingStatusId.NoCheckin:
       case BookingStatusId.Checkin:
-        return '#f5e8bf';
+        return '#fff4e4';
       case BookingStatusId.Finish:
-        return '#bff5d5';
+        return '#dffce6';
       case BookingStatusId.Run:
         return '#d2e6ef';
       default:
         return '#fff';
+    }
+  };
+  const getBorder = (status: string) => {
+    switch (status) {
+      case BookingStatusId.Cancel:
+        return 'red';
+      case BookingStatusId.Paid:
+      case BookingStatusId.Ready:
+      case BookingStatusId.NoCheckin:
+      case BookingStatusId.Checkin:
+        return 'orange';
+      case BookingStatusId.Finish:
+        return 'green';
+      case BookingStatusId.Run:
+        return '#8ab3c5';
+      default:
+        return 'orange';
     }
   };
   const {
@@ -59,13 +76,13 @@ export const TicketItem: React.FC<{
   const isDriver = userInfo.role === EAccountType.Driver;
 
   return (
-    <View style={[styles.ticket, {backgroundColor: getBackground(status)}]}>
+    <View style={[styles.ticket, {backgroundColor: getBackground(status),borderColor: getBorder(status)}]}>
       <View style={styles.ticketHeader}>
-        <Text style={{color: 'gray', fontSize: 16}}>Giờ xuất bến</Text>
-        <Text style={{color: 'orange', fontSize: 30}}>
+        <Text style={{color: 'gray', fontSize: 16,fontFamily:'SVN-Gilroy-Medium'}}>Giờ xuất bến</Text>
+        <Text style={{color: 'black', fontSize: 30,fontFamily:'SVN-Gilroy-SemiBold'}}>
           {timeStampToUtc(timeStart).format('HH:mm')}
         </Text>
-        <Text style={{fontSize: 18, color: 'gray'}}>
+        <Text style={{fontSize: 18, color: 'gray',fontFamily:'SVN-Gilroy-SemiBold'}}>
           {timeStampToUtc(timeStart).format('DD-MM-YYYY')}
         </Text>
         <Text
@@ -73,7 +90,7 @@ export const TicketItem: React.FC<{
             fontSize: 14,
             color: getColorStatus(status),
             marginTop: 10,
-            fontWeight: '800',
+            fontFamily:'SVN-Gilroy-SemiBold',
             textAlign: 'center',
           }}>
           {BookingStatusLabel[status]}
@@ -144,7 +161,7 @@ export const InfoItem = ({
   return (
     <View
       style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
-      {!!label && <Text style={{color: 'gray'}}>{label}: </Text>}
+      {!!label && <Text style={{color: 'gray',fontFamily:'SVN-Gilroy-Medium'}}>{label}: </Text>}
       {!!icon && (
         <IconFA
           name={icon.name}
@@ -197,7 +214,8 @@ const styles = StyleSheet.create({
   },
   ticketValue: {
     fontSize: 16,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily:'SVN-Gilroy-SemiBold'
   },
   ticketValueTime: {
     fontSize: 16,

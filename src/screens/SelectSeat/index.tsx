@@ -122,7 +122,7 @@ export const SelectSeat: React.FC = () => {
               paddingHorizontal: 16,
               paddingVertical: 16,
             }}>
-            <Text>{`Tầng ${index + 1}`}</Text>
+            <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>{`Tầng ${index + 1}`}</Text>
             {chunkArray(item, 2).map((row, index2) => (
               <View
                 key={index2}
@@ -181,8 +181,8 @@ export const SelectSeat: React.FC = () => {
               justifyContent: 'space-between',
               alignItems: 'stretch',
             }}>
-            <Text style={{marginBottom: 10}}>Ghế đang chọn</Text>
-            <Text>Giá vé dự kiến</Text>
+            <Text style={{marginBottom: 10,fontFamily:'SVN-Gilroy-Medium'}}>Ghế đang chọn</Text>
+            <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Giá vé dự kiến</Text>
           </View>
           <View
             style={{
@@ -191,10 +191,10 @@ export const SelectSeat: React.FC = () => {
               justifyContent: 'space-between',
               alignItems: 'flex-end',
             }}>
-            <Text style={{marginBottom: 10, color: 'red'}}>
+            <Text style={{marginBottom: 10, color: 'orange',fontFamily:'SVN-Gilroy-Medium'}}>
               {selectedSeatsText}
             </Text>
-            <Text>{formatPrice(listSelectSeat?.length * routeInfo.fare)}</Text>
+            <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>{formatPrice(listSelectSeat?.length * routeInfo.fare)}</Text>
           </View>
         </View>
       </View>
@@ -223,7 +223,7 @@ export const SelectSeat: React.FC = () => {
               backgroundColor: 'white',
               marginRight: 5,
             }}></View>
-          <Text>Trống</Text>
+          <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Trống</Text>
         </View>
         <View
           style={{
@@ -242,7 +242,7 @@ export const SelectSeat: React.FC = () => {
               backgroundColor: 'green',
               marginRight: 5,
             }}></View>
-          <Text>Đang chọn</Text>
+          <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Đang chọn</Text>
         </View>
         <View
           style={{
@@ -261,7 +261,7 @@ export const SelectSeat: React.FC = () => {
               backgroundColor: 'black',
               marginRight: 5,
             }}></View>
-          <Text>Đã đặt</Text>
+          <Text style={{fontFamily:'SVN-Gilroy-Medium'}}>Đã đặt</Text>
         </View>
       </View>
       <View
@@ -274,6 +274,7 @@ export const SelectSeat: React.FC = () => {
           title="Tiếp tục"
           onPress={onDepartureInfo}
           disabled={listSelectSeat.length === 0}
+          color="orange"
         />
       </View>
     </SafeAreaView>

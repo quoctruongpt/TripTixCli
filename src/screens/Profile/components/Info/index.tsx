@@ -118,6 +118,8 @@ export const Info: React.FC = () => {
           width: '100%',
           flexDirection: 'column',
           padding: 0,
+          paddingLeft: 20,
+          paddingRight: 20
         }}>
         <ScrollView style={{flex: 1}}>
           <View
@@ -157,6 +159,8 @@ export const Info: React.FC = () => {
                   value={value}
                   onChangeText={onChange}
                   errorMessage={errors.fullName?.message}
+                  style={{fontFamily:'SVN-Gilroy-Medium'}}
+                  
                 />
               )}
             />
@@ -169,6 +173,7 @@ export const Info: React.FC = () => {
                   value={value}
                   onChangeText={onChange}
                   errorMessage={errors.email?.message}
+                  style={{fontFamily:'SVN-Gilroy-Medium'}}
                 />
               )}
             />
@@ -181,6 +186,8 @@ export const Info: React.FC = () => {
                   value={value}
                   onChangeText={onChange}
                   errorMessage={errors.phone?.message}
+                  style={{fontFamily:'SVN-Gilroy-Medium'}}
+
                 />
               )}
             />
@@ -204,7 +211,8 @@ export const Info: React.FC = () => {
                         borderColor: '#ccc',
                         marginBottom: 20,
                       }}>
-                      <Text style={{fontSize: 18}}>{title}</Text>
+                      <Text style={{fontSize: 18,fontFamily:'SVN-Gilroy-Medium'}}>{title}</Text>
+
                     </TouchableOpacity>
                   )}
                 />
@@ -230,6 +238,7 @@ export const Info: React.FC = () => {
                   value={value}
                   onChangeText={onChange}
                   errorMessage={errors.address?.message}
+                  style={{fontSize: 18,fontFamily:'SVN-Gilroy-Medium'}}
                 />
               )}
             />
@@ -254,7 +263,7 @@ export const Info: React.FC = () => {
               loading={isUpdate}
               disabled={isUpdate || !isValid || !isDirty}
               buttonStyle={{
-                backgroundColor: 'red',
+                backgroundColor: 'orange',
                 width: '100%',
               }}
             />

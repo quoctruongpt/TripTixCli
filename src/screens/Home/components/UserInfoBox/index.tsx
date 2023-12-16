@@ -8,16 +8,17 @@ export const UserInfoBox: React.FC<{ name: string }> = ({ name }) => {
 
   return (
     <ImageBackground
-      source={require("@assets/images/background.jpg")}
+      source={require("@assets/images/bg_Linear.jpg")}
       style={{
         backgroundColor: "red",
         flexDirection: "row",
-        paddingTop: 12 + top,
+        paddingTop: 40 + top,
         paddingHorizontal: 16,
-        paddingBottom: 60,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
+        paddingBottom: 50,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
         zIndex: 100,
+        
       }}
     >
       {/* <View> */}
@@ -26,10 +27,11 @@ export const UserInfoBox: React.FC<{ name: string }> = ({ name }) => {
         rounded
         size={32}
         containerStyle={{ backgroundColor: "#ccc" }}
+        
       />
       <View style={{ flex: 1, marginLeft: 16 }}>
-        <Text style={{ color: "#fff" }}>Hello,</Text>
-        <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
+        <Text style={{ color: "#fff",fontFamily:"SVN-Gilroy-Medium" }}>Xin chào,</Text>
+        <Text style={{ color: "#fff", fontSize: 16, fontFamily:"SVN-Gilroy-SemiBold" }}>
           {name}
         </Text>
       </View>

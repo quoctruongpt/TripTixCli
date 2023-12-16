@@ -14,7 +14,7 @@ export const WalletItem: React.FC<{
       style={{ alignItems: "center", flex: 1 }}
     >
       <Icon name={icon} size={24} color={"#f27751"} />
-      <Text>{title}</Text>
+      <Text style={{fontFamily:"SVN-Gilroy-Medium"}}>{title}</Text>
     </TouchableOpacity>
   );
 };

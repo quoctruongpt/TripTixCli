@@ -52,6 +52,7 @@ export const Notification: React.FC = () => {
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={getNotification} />
         }
+        style={{padding:10}}
         data={listNoti}
         keyExtractor={item => item.idNotification}
         renderItem={({item}) => (
@@ -61,6 +62,8 @@ export const Notification: React.FC = () => {
               borderBottomWidth: 1,
               borderBottomColor: '#ccc',
               backgroundColor: item.seen ? '#fff' : '#F0F0F0',
+              marginBottom: 10,
+              borderRadius:20
             }}>
             {!item.seen && (
               <View
@@ -75,15 +78,15 @@ export const Notification: React.FC = () => {
                 }}
               />
             )}
-            <Text style={{fontSize: 12, fontWeight: '700', marginBottom: 8}}>
+            <Text style={{fontSize: 13, fontFamily: 'SVN-Gilroy-XBold', marginBottom: 8}}>
               Hệ thống
             </Text>
-            <Text>{item.description}</Text>
+            <Text style={{ fontFamily: 'SVN-Gilroy-SemiBold'}} >{item.description}</Text>
             <Text
               style={{
                 color: 'grey',
-                fontSize: 10,
-                fontStyle: 'italic',
+                fontSize: 11,
+                fontFamily:'SVN-Gilroy-Medium',
                 textAlign: 'right',
               }}>
               {dayjs.unix(item.createdDateL).format('HH:mm - DD/MM/YYYY')}
@@ -113,6 +116,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#DEDEDE',
   },
 });

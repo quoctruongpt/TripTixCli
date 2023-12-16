@@ -194,7 +194,7 @@ export const SignUp: React.FC = () => {
         </KeyboardAwareScrollView>
         <View style={styles.footer}>
           <ButtonApp
-            title="Continue"
+            title="Tiếp tục"
             buttonStyle={styles.buttonContinue}
             onPress={handleContinue}
             loading={isLoading}

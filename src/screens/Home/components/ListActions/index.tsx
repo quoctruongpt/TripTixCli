@@ -17,7 +17,7 @@ export const ListActions: React.FC = () => {
       <Text
         style={{
           fontSize: 16,
-          fontWeight: "bold",
+          fontFamily:'SVN-Gilroy-SemiBold',
           flex: 1,
           marginBottom: 16,
         }}
@@ -40,7 +40,7 @@ const Action: React.FC<{ title: string; onPress: () => void }> = ({
       <View style={styles.iconWrap}>
         <Icon name="car" color={"green"} size={24} />
       </View>
-      <Text>{title}</Text>
+      <Text style={{fontFamily:"SVN-Gilroy-Regular"}}>{title}</Text>
     </TouchableOpacity>
   );
 };

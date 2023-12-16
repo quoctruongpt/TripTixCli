@@ -171,11 +171,13 @@ export const TicketInformation: React.FC = () => {
       <ScrollView style={{flex: 1}}>
         <Box
           title="Thông tin người đặt vé"
+          
           data={[
             {label: 'Họ tên', value: userInformation.name},
             {label: 'Số điện thoại', value: userInformation.phone},
             {label: 'Email', value: userInfo.email},
           ]}
+        
         />
         <Box
           title="Thông tin chuyến xe - Chiều đi"
@@ -231,8 +233,9 @@ export const TicketInformation: React.FC = () => {
           <Text
             style={{
               fontSize: 16,
-              fontWeight: '800',
+              fontFamily:'SVN-Gilroy-SemiBold',
               marginBottom: 20,
+              color:'#FF9012'
             }}>
             Thông tin thanh toán
           </Text>
@@ -242,16 +245,16 @@ export const TicketInformation: React.FC = () => {
               backgroundColor: '#f9f9f9',
               borderRadius: 12,
             }}>
-            <Item label="Giá" value={formatPrice(totalPrice)} />
+            <Item label="Giá" value={formatPrice(totalPrice)} styleValue={{fontSize: 16, fontFamily: 'SVN-Gilroy-Bold'}} />
             {!!routeRoundInfo && (
               <Item label="Khứ hồi" value={formatPrice(totalPriceRound)} />
             )}
-            <Item label="Khuyễn mại" value="0đ" />
+            <Item label="Khuyễn mại" value="0đ" styleValue={{fontSize: 16, fontFamily: 'SVN-Gilroy-Bold'}}/>
             <Divider style={{marginVertical: 12}} />
             <Item
               label="Thành tiền"
               value={formatPrice(totalPrice + totalPriceRound)}
-              styleValue={{fontSize: 16, fontWeight: '700'}}
+              styleValue={{fontSize: 18, fontFamily: 'SVN-Gilroy-Medium'}}
             />
           </View>
         </View>
@@ -275,9 +278,10 @@ export const TicketInformation: React.FC = () => {
         disabled={loading}
         onPress={handlePressPayment}
         buttonStyle={{
-          backgroundColor: 'red',
+          backgroundColor: 'orange',
           margin: 10,
         }}
+        titleStyle={{color:"black",fontSize:18}}
       />
 
       <PopupError
@@ -313,8 +317,8 @@ const Item = ({
 }) => {
   return (
     <View style={styles.item}>
-      <Text style={{color: '#8b96a0'}}>{label}</Text>
-      <Text style={styleValue ?? {fontWeight: '600'}}>{value}</Text>
+      <Text style={{color: '#8b96a0', fontFamily:'SVN-Gilroy-Medium'}}>{label}</Text>
+      <Text style={styleValue ?? {fontFamily: 'SVN-Gilroy-Bold'}}>{value}</Text>
     </View>
   );
 };
@@ -328,7 +332,7 @@ const Box = ({
 }) => {
   return (
     <View style={styles.box}>
-      <Text style={{fontSize: 16, fontWeight: '800', marginBottom: 20}}>
+      <Text style={{fontSize: 16, fontFamily: 'SVN-Gilroy-SemiBold', marginBottom: 20,color:'#FF9012'}}>
         {title}
       </Text>
       {data.map((item, index) => (

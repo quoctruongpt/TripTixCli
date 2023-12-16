@@ -64,7 +64,7 @@ export const ChooseProvince: React.FC<{
             padding: 16,
             maxHeight: 500,
           }}>
-          <Text style={{fontSize: 16, fontWeight: '700', textAlign: 'center'}}>
+          <Text style={{fontSize: 16, fontFamily: 'SVN-Gilroy-Bold', textAlign: 'center'}}>
             {title ?? 'Chọn điểm đến'}
           </Text>
           <Input

@@ -27,8 +27,8 @@ const IconsBottomTab = {
 };
 
 const Colors = {
-  Active: '#f2754f',
-  Inactive: '#637280',
+  Active: '#FE5D26',
+  Inactive: '#C9c8c7',
 };
 
 export const BottomTabNavigator: React.FC = () => {
@@ -53,29 +53,41 @@ export const BottomTabNavigator: React.FC = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={({route}) => {
-        return {
-          headerShown: false,
-          tabBarIcon: ({focused}) => tabBarIcon(focused, route, isDriver),
-          tabBarActiveTintColor: Colors.Active,
-          tabBarInactiveTintColor: Colors.Inactive,
-        };
-      }}>
+      screenOptions={({route}) => ({
+        headerShown: false,
+        tabBarIcon: ({focused}) => tabBarIcon(focused, route, isDriver),
+        tabBarActiveTintColor: Colors.Active,
+        tabBarInactiveTintColor: Colors.Inactive,
+        tabBarStyle: {
+          backgroundColor: '#000000', // Background color of the tab bar
+          // borderTopWidth: 1, // Border at the top of the tab bar
+          borderTopColor: '#ffbfa5', // Color of the border
+          borderTopLeftRadius:20,
+          borderTopRightRadius:20,
+          height: 60,
+          paddingBottom: 1, // Padding at the bottom of the tab bar
+          paddingTop: 8
+        },
+        tabBarLabelStyle: {
+          fontSize: 13, // Font size of the tab labels
+          fontWeight: 'bold', // Font weight of the tab labels
+        },
+      })}>
       <Tab.Screen
         name="Home"
         component={isDriver ? HistoryDriver : Home}
-        options={{title: isDriver ? 'Hoạt động' : 'Trang chủ'}}
+        options={{title: isDriver ? '' : ''}}
       />
       <Tab.Screen
         name="History"
         component={isDriver ? ListTrip : History}
-        options={{title: 'Lịch sử'}}
+        options={{title: ''}}
       />
       <Tab.Screen
         name="Notification"
         component={Notification}
         options={{
-          title: 'Thông báo',
+          title: '',
           headerTitle: 'Thông báo',
           headerShown: true,
           tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
@@ -84,7 +96,7 @@ export const BottomTabNavigator: React.FC = () => {
       <Tab.Screen
         name="Profile"
         component={Profile}
-        options={{title: 'Tài khoản'}}
+        options={{title: ''}}
       />
     </Tab.Navigator>
   );

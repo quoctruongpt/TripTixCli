@@ -12,8 +12,9 @@ import {ScreenLoading} from '@components/Loading';
 const {width} = Dimensions.get('screen');
 const banner = [
   'https://www.hyundaivna.com/wp-content/uploads/2019/02/11.jpg',
-  'https://homepage.momocdn.net/img/momo-upload-api-220617171025-637910826257791159.jpg',
+  'https://i.ibb.co/0nZhntN/anhmomo.png',
   'https://homepage.momocdn.net/blogscontents/momo-upload-api-220803151053-637951362531172965.jpg',
+  'https://i.ibb.co/LnPJpsq/bus.png'
 ];
 
 export const Banner: React.FC = () => {
@@ -70,14 +71,14 @@ export const Banner: React.FC = () => {
           }}>
           <Text
             style={{
-              fontSize: 16,
-              fontWeight: 'bold',
+              fontSize: 18,
+              fontFamily:'SVN-Gilroy-Bold',
               flex: 1,
             }}>
             Tin tức
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('News')}>
-            <Text style={{color: '#e4613b'}}>Xem tất cả</Text>
+            <Text style={{color: '#e4613b', fontFamily:'SVN-Gilroy-Medium'}}>Xem tất cả</Text>
           </TouchableOpacity>
         </View>
         {loading && data.length < 1 && (
@@ -123,11 +124,14 @@ const Item: React.FC<{
       />
       <View style={{flex: 1, marginLeft: 8}}>
         {showLine && <Divider style={{marginBottom: 10}} />}
-        <Text style={{fontWeight: '900'}}>{title}</Text>
-        <Text style={{fontSize: 12}} numberOfLines={3}>
+        <Text style={{ fontFamily:'SVN-Gilroy-Bold'}} numberOfLines={1}>{title}</Text>
+        <Text style={{fontFamily:'SVN-Gilroy Medium', fontSize: 12}} numberOfLines={3}>
           {content}
         </Text>
       </View>
     </TouchableOpacity>
   );
 };
+
+
+

@@ -10,6 +10,7 @@ import {StatusApiCall} from '@constants/global';
 import {useToast} from 'react-native-toast-notifications';
 import {useNavigation} from '@react-navigation/native';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
+import { color } from '@rneui/base';
 // import Icon from "react-native-vector-icons/MaterialIcons";
 
 export const Point: React.FC = () => {
@@ -55,7 +56,7 @@ export const Point: React.FC = () => {
           style={{marginTop: 24}}
           onValueChange={setChangeCoin}
           minimumValue={10000}
-          minimumTrackTintColor="red"
+          minimumTrackTintColor="orange"
           maximumValue={max >= 10000 ? max : 10000}
           disabled={max < 10000}
           thumbProps={{
@@ -88,6 +89,8 @@ export const Point: React.FC = () => {
         onPress={() => setShowConfirm(true)}
         loading={loading}
         disabled={max < 10000}
+        buttonStyle={{borderRadius:20}}
+        color={'orange'}  
       />
 
       <PopupConfirm

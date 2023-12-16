@@ -77,7 +77,7 @@ const Item = ({
           style={{
             marginBottom: 4,
           }}>
-          <Text style={{fontWeight: '900'}}>{title}</Text>
+          <Text style={{fontFamily: "SVN-Gilroy-XBold", marginBottom: 4}}>{title}</Text>
           {!!costsIncurred && (
             <Text
               style={{
@@ -87,7 +87,7 @@ const Item = ({
               }}>{` - ${formatPrice(costsIncurred)}`}</Text>
           )}
         </Text>
-        <Text style={{fontSize: 12, color: 'grey', marginBottom: 4}}>
+        <Text style={{fontSize: 12,fontFamily:'SVN-Gilroy-Medium', color: "grey", marginBottom: 4}}>
           {desc}
         </Text>
       </View>

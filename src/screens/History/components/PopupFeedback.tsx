@@ -44,7 +44,7 @@ export const PopupFeedback = ({
               )}
             />
           </View>
-          <Controller
+          {/* <Controller
             control={control}
             name="feedback"
             render={({ field: { value, onChange } }) => (
@@ -56,7 +56,7 @@ export const PopupFeedback = ({
                 onChangeText={onChange}
               />
             )}
-          />
+          /> */}
         </View>
         <View
           style={{
