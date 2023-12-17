@@ -21,7 +21,7 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
     timeRefund: config?.timeRefund ?? 24,
   };
 
-  const diff = useMemo(() => {
+  const   diff = useMemo(() => {
     const now = dayjs().add(7, 'hour').utc().format();
     const timeStart = dayjs(ticket?.tripDTO?.startTimee * 1000, {utc: true});
     const diff = timeStart.diff(now, 'day');
@@ -43,8 +43,8 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
           }}>
           <Icon name="close-circle" size={24} color={'#ccc'} />
         </TouchableOpacity>
-        <View style={{padding: 20}}>
-          <Text style={{fontSize: 18, fontWeight: '800', textAlign: 'center'}}>
+        <View style={{padding: 23}}>
+          <Text style={{fontSize: 18, fontFamily: 'SVN-Gilroy-XBold', textAlign: 'center'}}>
             Huỷ chuyến
           </Text>
           <View style={{alignItems: 'center'}}>
@@ -57,18 +57,35 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
               }}
             />
           </View>
-          <Text style={{textAlign: 'center', marginBottom: 16, marginTop: 24}}>
+          <Text style={{textAlign: 'center', marginBottom: 16, marginTop: 24,fontFamily:'SVN-Gilroy-Medium'}}>
             Bạn đang yêu cầu huỷ chuyến đi từ{' '}
-            <Text style={{fontWeight: '600'}}>{ticket.pickUpPoint}</Text> đến{' '}
-            <Text style={{fontWeight: '600'}}>{ticket.dropOffPoint}</Text>
+            <Text style={{fontFamily: 'SVN-Gilroy-Bold'}}>{ticket.pickUpPoint}</Text> đến{' '}
+            <Text style={{fontFamily: 'SVN-Gilroy-Bold'}}>{ticket.dropOffPoint}</Text>
           </Text>
-          <Text style={{textAlign: 'center', marginBottom: 16}}>
+          
+
+
+          <Text style={{textAlign: 'center', marginBottom: 2,fontFamily:'SVN-Gilroy-Medium'}}>
+          *Nếu bạn hủy vé <Text style={{color:'red'}}>trước giờ khởi hành tối thiểu {timeRefund}</Text> tiếng, chúng tôi sẽ hoàn lại <Text style={{color:'red'}}>{percentRefundOver1Hour*100}%</Text> giá vé.* 
+          </Text>
+          <Text style={{textAlign: 'center', marginBottom: 2,fontFamily:'SVN-Gilroy-Medium'}}>
+          *Nếu hủy trong vòng <Text style={{color:'red'}}>{timeRefund}</Text> tiếng trước giờ khởi hành, bạn sẽ được hoàn <Text style={{color:'red'}}>{percentRefundUnder1Hour*100}%</Text> giá trị vé.* 
+          </Text>
+          <Text style={{textAlign: 'center', marginBottom: 2,fontFamily:'SVN-Gilroy-Medium'}}>
+          *Bạn sẽ không được hủy vé trước khi xe chạy 1 tiếng.*
+          </Text>
+          <Text style={{textAlign: 'center',color:'red', marginBottom: 16,fontFamily:'SVN-Gilroy-Medium'}}>
+            Chính sách này nhằm mang lại sự linh hoạt và công bằng cho khách hàng."
+          </Text>
+
+
+          <Text style={{textAlign: 'center', marginBottom: 16,fontFamily:'SVN-Gilroy-Medium'}}>
             Thời gian tới khi chuyến xe khởi hành:{' '}
-            <Text style={{fontWeight: '600'}}>{diff}</Text> giờ
+            <Text style={{fontFamily: 'SVN-Gilroy-Bold'}}>{diff}</Text> giờ
           </Text>
-          <Text style={{textAlign: 'center', marginBottom: 16}}>
+          <Text style={{textAlign: 'center', marginBottom: 16,fontFamily:'SVN-Gilroy-Medium'}}>
             Số tiền sẽ được hoàn trả:{' '}
-            <Text style={{fontWeight: '600'}}>
+            <Text style={{fontFamily: 'SVN-Gilroy-Bold'}}>
               {formatPrice(
                 diff < timeRefund
                   ? ticket.totalPrice * percentRefundUnder1Hour

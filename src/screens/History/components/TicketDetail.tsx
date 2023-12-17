@@ -95,7 +95,7 @@ export const TicketDetail = ({
             </Text>
           </View>
         </View> */}
-        <Text style={{ fontSize: 18, fontWeight: "800", textAlign: "center" }}>
+        <Text style={{ fontSize: 18, fontFamily: "SVN-Gilroy-XBold", textAlign: "center" }}>
           Thông tin chuyến đi
         </Text>
         <View style={{ alignItems: "center", marginVertical: 16 }}>
@@ -160,8 +160,8 @@ const InfoItem = ({
 }) => {
   return (
     <View style={{ flexDirection: "row", marginBottom: 4 }}>
-      <Text style={{ flex: 1 }}>{label}</Text>
-      <Text style={{ flex: 2, fontWeight: "600" }}>{value}</Text>
+      <Text style={{ flex: 1,fontFamily:'SVN-Gilroy-Medium' }}>{label}</Text>
+      <Text style={{ flex: 2, fontFamily: "SVN-Gilroy-Bold" }}>{value}</Text>
     </View>
   );
 };

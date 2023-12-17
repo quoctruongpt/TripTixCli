@@ -37,7 +37,6 @@ export const Banner: React.FC = () => {
       setLoading(false);
     }
   };
-
   const renderItem = ({item, index}) => {
     return (
       <Image
@@ -45,7 +44,7 @@ export const Banner: React.FC = () => {
         style={{
           width: '100%',
           height: 150,
-          backgroundColor: 'red',
+          backgroundColor: 'orange',
           borderRadius: 16,
         }}
       />
@@ -115,7 +114,7 @@ const Item: React.FC<{
       <Image
         source={{uri: image}}
         style={{
-          backgroundColor: 'red',
+          backgroundColor: 'orange',
           width: 70,
           height: 70,
           borderRadius: 8,

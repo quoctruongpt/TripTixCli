@@ -1,5 +1,5 @@
 import {ButtonApp} from '@components/Button';
-import {ChooseProvince} from '@components/ChooseProvince';
+import {qet nfagdvzccccccccccccccccccccccccc3e4ChooseProvince} from '@components/ChooseProvince';
 import {Steps} from '@components/Steps';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
 import {KeyboardAwareScrollView} from '@pietile-native-kit/keyboard-aware-scrollview';
@@ -99,7 +99,7 @@ export const DepartureInformation: React.FC = observer(() => {
   const listLength = routeInfo.listtripStopDTO.length;
   const isSubTripRound = routeRoundInfo?.subTrip;
   const listLengthRound = routeRoundInfo?.listtripStopDTO.length;
-
+  console.log("hahaha",listLength);
   const listPickup = useMemo(() => {
     const indexDropOff = routeInfo.listtripStopDTO.findIndex(
       item => item.id === dropOffId,
