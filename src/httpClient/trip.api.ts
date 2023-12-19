@@ -129,6 +129,10 @@ const getReadyRoleDriver = (
   );
 };
 
+const putCheckout = (idBooking: number) => {
+  return httpClient.put(`${routes.trip.checkout}?idBooking=${idBooking}`);
+};
+
 export {
   getTrips,
   getRouteInfo,
@@ -146,4 +150,5 @@ export {
   postBookTicketRound,
   getHistoryRoleDriver,
   getReadyRoleDriver,
+  putCheckout,
 };

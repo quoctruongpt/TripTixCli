@@ -13,12 +13,14 @@ import {
   putStartTrip,
   getTripDetail,
   putConfirmSuccessTrip,
+  putCheckout,
 } from '@httpClient/trip.api';
 import {StatusApiCall} from '@constants/global';
 import {ListCustomer} from './ListCustomer';
 import {timeStampToUtc} from '@utils/time';
 import {useStore} from '@store';
 import {ConfigContext} from '@navigation';
+import {ListCustomerStation} from './ListCustomerStation';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -37,15 +39,40 @@ export const TicketDetail = ({
   const [trip, setTrip] = useState(booking);
   const [loading, setLoading] = useState(false);
   const [isModeTest, setIsModeTest] = useState(false);
+  const [stationInfo, setStationInfo] = useState(null);
+  const [getting, setGetting] = useState<number[]>([]);
 
   const steps = booking?.listtripStopDTO.map(item => {
-    const customers = booking.listBooking.filter(
-      customer => customer.dropOffPoint === item.stationDTO.name,
+    const customersA = trip.listBooking.filter(
+      customer =>
+        customer.dropOffPoint === item.stationDTO.name ||
+        customer.pickUpPoint === item.stationDTO.name,
     );
+
+    const customers = customersA.map(customer => {
+      const seats = booking.seatNameBooking
+        .filter(seat => seat.idBooking === customer.idBooking)
+        .map(seat => seat.seatName);
+
+      return {
+        ...customer,
+        seats: seats.join(', '),
+        type:
+          item.stationDTO.name === customer.pickUpPoint ? 'pickup' : 'dropOff',
+      };
+    });
+
     const total = customers.reduce(
-      (acc, currentValue) => acc + currentValue.listTicket?.length,
+      (acc, currentValue) =>
+        currentValue.type === 'dropOff' && acc + currentValue.numberOfTickets,
       0,
     );
+    const totalPickup = customers.reduce(
+      (acc, currentValue) =>
+        currentValue.type === 'pickup' && acc + currentValue.numberOfTickets,
+      0,
+    );
+
     return {
       time: timeStampToUtc(item.timeComess).format('HH:mm'),
       title: item.stationDTO.name,
@@ -54,11 +81,21 @@ export const TicketDetail = ({
         color: 'red',
       },
       desc:
+        totalPickup > 0
+          ? `Có ${totalPickup} khách hàng lên trạm`
+          : 'Không có khách hàng nào lên trạm này',
+      desc2:
         total > 0
           ? `Có ${total} khách hàng xuống trạm`
           : 'Không có khách hàng nào xuống trạm này',
+      customers,
+      ...item,
     };
   });
+
+  const stationInfoDetail = steps.find(
+    item => item.stationDTO.idStation === stationInfo,
+  );
 
   const timeStart = dayjs(booking.startTimee * 1000, {utc: true});
   const timeEnd = dayjs(booking.endTimee * 1000, {utc: true});
@@ -67,7 +104,10 @@ export const TicketDetail = ({
   const nowToStart = timeStart.diff(now, 'minute');
   const nowToEnd = timeEnd.diff(now, 'minute');
 
-  const [showCheckin, setShowCheckin] = useState(false);
+  const [showCheckin, setShowCheckin] = useState({
+    show: false,
+    defaultBooking: '',
+  });
   const [showListCustomer, setShowListCustomer] = useState(false);
 
   useEffect(() => {
@@ -120,6 +160,31 @@ export const TicketDetail = ({
   const showButtonStart =
     trip.status === BookingStatusId.Ready && (nowToStart <= 30 || isModeTest);
 
+  const handlePressPoint = (item: any) => {
+    setStationInfo(item);
+  };
+
+  const handlePressCheckin = (bookingId: number) => {
+    // setStationInfo(null);
+    setShowCheckin({show: true, defaultBooking: bookingId});
+  };
+
+  const handleCheckout = async (bookingId: number) => {
+    try {
+      setGetting(pre => [...pre, bookingId]);
+      const {data} = await putCheckout(bookingId);
+      if (data.status === StatusApiCall.Success) {
+        await getTrip();
+        return;
+      }
+
+      throw new Error();
+    } catch {
+    } finally {
+      setGetting(pre => pre.filter(item => item !== bookingId));
+    }
+  };
+
   return (
     <ReactNativeModal
       isVisible={show}
@@ -169,7 +234,11 @@ export const TicketDetail = ({
             />
             <Text style={{flex: 1}}>{'Danh sách trạm'}</Text>
             <View style={{marginBottom: 4}}>
-              <Steps data={steps} />
+              <Steps
+                data={steps}
+                onPressItem={handlePressPoint}
+                disable={trip.status !== 'RUN'}
+              />
             </View>
           </View>
         </ScrollView>
@@ -208,7 +277,7 @@ export const TicketDetail = ({
         {trip.status === BookingStatusId.Run && (
           <Button
             title={'Checkin'}
-            onPress={() => setShowCheckin(true)}
+            onPress={() => setShowCheckin({show: true, defaultBooking: ''})}
             loading={loading}
           />
         )}
@@ -221,11 +290,22 @@ export const TicketDetail = ({
           />
         )}
 
+        <ListCustomerStation
+          show={!!stationInfoDetail}
+          onClose={() => setStationInfo(null)}
+          stationName={stationInfoDetail?.title}
+          customers={stationInfoDetail?.customers}
+          onPressCheckin={handlePressCheckin}
+          onPressCheckout={handleCheckout}
+          loading={getting}
+        />
         <Checkin
-          show={showCheckin}
-          onClose={() => setShowCheckin(false)}
+          show={showCheckin.show}
+          onClose={() => setShowCheckin({show: false, defaultBooking: ''})}
+          defaultBooking={showCheckin.defaultBooking}
           idTrip={trip.idTrip}
           onCheckinSuccess={getTrip}
+          setGetting={setGetting}
         />
         <ListCustomer
           show={showListCustomer}
