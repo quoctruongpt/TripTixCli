@@ -98,7 +98,7 @@ export const Notification: React.FC = () => {
             return <ScreenLoading type="notification" />;
           }
           return (
-            <View>
+            <View style={{justifyContent:'center',alignItems:'center'}}>
               <Icon
                 name="notifications-paused"
                 size={80}

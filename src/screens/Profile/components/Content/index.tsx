@@ -1,6 +1,6 @@
 import {Text, Avatar} from '@rneui/themed';
 import React from 'react';
-import {View, TouchableOpacity, Alert} from 'react-native';
+import {View, TouchableOpacity, Linking, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
@@ -24,6 +24,9 @@ export const Content: React.FC = observer(() => {
   };
   const onClickSelectRoute = () => {
     navigation.navigate('SelectRoute');
+  };
+  const openFacebookPage = () => {
+    Linking.openURL('https://www.facebook.com/profile.php?id=61554950033197&is_tour_dismissed=true'); // Thay thế link này bằng đường dẫn đến fanpage của bạn
   };
   const onClickLogout = () => {
     Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất khỏi ứng dụng?', [
@@ -147,9 +150,11 @@ export const Content: React.FC = observer(() => {
       </View>
       <View style={styles.itemMedium}>
         <Icon name="groups" size={18} color="#00FF00" />
-        <View style={styles.textWrapper}>
-          <Text style={{color: '#000', fontSize: 14}}>Cộng đồng</Text>
-        </View>
+        <TouchableOpacity style={styles.textWrapper} onPress={openFacebookPage}>
+      <View >
+        <Text style={{ color: '#000', fontSize: 14 }}>Cộng đồng</Text>
+      </View>
+    </TouchableOpacity>
         <Icon name="chevron-right" size={18} color="gray" />
       </View>
       <TouchableOpacity onPress={onClickLogout} style={styles.itemNormal}>

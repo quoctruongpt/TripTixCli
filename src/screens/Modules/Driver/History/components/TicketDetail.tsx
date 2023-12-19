@@ -5,7 +5,7 @@ import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {formatPrice} from '@utils/price';
 import {BookingStatusId} from '@constants/route';
-import {Steps} from '@components/Steps';
+import {Steps2} from '@components/Steps2';
 import dayjs from 'dayjs';
 import {Button} from '@rneui/themed';
 import {Checkin} from './Checkin';
@@ -37,27 +37,84 @@ export const TicketDetail = ({
   const [trip, setTrip] = useState(booking);
   const [loading, setLoading] = useState(false);
   const [isModeTest, setIsModeTest] = useState(false);
+  let sum = 0;
+  let sum2 = 0;
 
-  const steps = booking?.listtripStopDTO.map(item => {
-    const customers = booking.listBooking.filter(
-      customer => customer.dropOffPoint === item.stationDTO.name,
+ 
+  const steps = booking?.listtripStopDTO.map((item) => {
+    const customers = booking?.listBooking.filter(
+      customer => {
+        console.log(12345,customer.dropOffPoint === item.stationDTO.name)
+        return customer.dropOffPoint === item.stationDTO.name  
+      }
     );
-    const total = customers.reduce(
-      (acc, currentValue) => acc + currentValue.listTicket?.length,
-      0,
+    const customers2 = booking?.listBooking.filter(
+      customer2 => {
+        console.log(12345,customer2.pickUpPoint === item.stationDTO.name)
+        return customer2.pickUpPoint === item.stationDTO.name  
+      }
     );
-    return {
-      time: timeStampToUtc(item.timeComess).format('HH:mm'),
-      title: item.stationDTO.name,
-      icon: {
-        name: item.type === 'DROPOFF' ? 'location-on' : 'location-searching',
-        color: 'red',
-      },
-      desc:
-        total > 0
-          ? `Có ${total} khách hàng xuống trạm`
-          : 'Không có khách hàng nào xuống trạm này',
-    };
+      const getCusTomers =  customers.map((item) =>{
+        // console.log("item",item);  
+        return item.userSystemDTO.fullName
+          
+      })
+      const getCusTomers2 =  customers2.map((item) =>{
+        // console.log("item",item);  
+        return item.userSystemDTO.fullName
+      })
+
+      const numberOfticket =  customers.map((item) =>{
+        console.log("item",item);  
+        return item.numberOfTickets
+      })
+      for (let i = 0; i < numberOfticket.length; i++ ) {
+        sum += numberOfticket[i];
+      }
+
+    
+      const numberOfticket2 =  customers2.map((item) =>{
+        sum2=0
+        console.log("item2",item.numberOfTickets);  
+        return item.numberOfTickets
+      })    
+      console.log("numberOfticket2",numberOfticket2);
+      for (let j = 0; j < numberOfticket2.length; j++ ) {
+        
+        sum2 += numberOfticket2[j];
+      }
+      console.log("customers2",customers2);
+      console.log("sum2",sum2)
+
+      console.log("sum",sum)
+
+      // console.log("abcd",customers)
+      
+      // console.log("abc",customers)
+      // console.log("danh sách cus:",getCusTomers);
+
+      return {
+        time: timeStampToUtc(item.timeComess).format('HH:mm'),
+        title: item.stationDTO.name,
+        icon: {
+          name: item.type === 'DROPOFF' ? 'location-on' : 'location-searching',
+          color: 'red',
+        },
+        customers: getCusTomers,
+        customers2: customers2,
+        numberOfticket :numberOfticket,
+        getCusTomers: getCusTomers,
+        getCusTomers2: getCusTomers2,
+        desc:
+        customers.length > 0
+            ? `Có ${sum} khách hàng xuống trạm`
+            : 'Không có khách hàng nào xuống trạm này',
+        desc2:
+        customers2.length > 0
+            ? `Có ${sum2} khách hàng lên trạm`
+            : 'Không có khách hàng nào lên trạm này',
+      };
+
   });
 
   const timeStart = dayjs(booking.startTimee * 1000, {utc: true});
@@ -73,6 +130,7 @@ export const TicketDetail = ({
   useEffect(() => {
     getTrip();
   }, []);
+  console.log(trip);
 
   const getTrip = async () => {
     try {
@@ -169,7 +227,7 @@ export const TicketDetail = ({
             />
             <Text style={{flex: 1}}>{'Danh sách trạm'}</Text>
             <View style={{marginBottom: 4}}>
-              <Steps data={steps} />
+              <Steps2 data={steps} />
             </View>
           </View>
         </ScrollView>

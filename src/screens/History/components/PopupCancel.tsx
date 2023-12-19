@@ -81,7 +81,7 @@ export const PopupCancel = ({ticket, onClose = () => {}, onConfirm, show}) => {
 
           <Text style={{textAlign: 'center', marginBottom: 16,fontFamily:'SVN-Gilroy-Medium'}}>
             Thời gian tới khi chuyến xe khởi hành:{' '}
-            <Text style={{fontFamily: 'SVN-Gilroy-Bold'}}>{diff}</Text> giờ
+            <Text style={{fontFamily: 'SVN-Gilroy-Bold'}}>{diff}</Text> ngày
           </Text>
           <Text style={{textAlign: 'center', marginBottom: 16,fontFamily:'SVN-Gilroy-Medium'}}>
             Số tiền sẽ được hoàn trả:{' '}

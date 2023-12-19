@@ -1,5 +1,5 @@
 import {ButtonApp} from '@components/Button';
-import {qet nfagdvzccccccccccccccccccccccccc3e4ChooseProvince} from '@components/ChooseProvince';
+import {ChooseProvince} from '@components/ChooseProvince';
 import {Steps} from '@components/Steps';
 import {TAppNavigation} from '@navigation/AppNavigator.type';
 import {KeyboardAwareScrollView} from '@pietile-native-kit/keyboard-aware-scrollview';
