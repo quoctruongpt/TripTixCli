@@ -34,6 +34,7 @@ const routes = {
     historyTripDriver: url.baseUrl + '/trips/history-driver',
     driverHistory: url.baseUrl + '/trips/trip-finish-cancel-of-driver',
     driverReady: url.baseUrl + '/trips/trip-ready-of-driver',
+    checkout: url.baseUrl + '/bookings/status',
   },
   payment: {
     topUp: url.baseUrl + '/payment/create_payment-url',

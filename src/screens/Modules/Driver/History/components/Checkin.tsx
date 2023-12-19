@@ -1,36 +1,49 @@
-import ReactNativeModal from "react-native-modal";
-import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View, TextInput, SafeAreaView } from "react-native";
-import { TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { formatPrice } from "@utils/price";
-import { Button } from "@rneui/themed";
-import { BarCodeScanner } from "expo-barcode-scanner";
-import { useToast } from "react-native-toast-notifications";
-import { putCheckin } from "@httpClient/trip.api";
-import { StatusApiCall } from "@constants/global";
+import ReactNativeModal from 'react-native-modal';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, Text, View, TextInput, SafeAreaView} from 'react-native';
+import {TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {formatPrice} from '@utils/price';
+import {Button} from '@rneui/themed';
+import {BarCodeScanner} from 'expo-barcode-scanner';
+import {useToast} from 'react-native-toast-notifications';
+import {putCheckin} from '@httpClient/trip.api';
+import {StatusApiCall} from '@constants/global';
 
 export const Checkin = ({
   onClose = () => {},
   show,
   idTrip,
   onCheckinSuccess = () => {},
+  defaultBooking,
+  setGetting,
 }: {
   onClose: () => void;
   show: boolean;
   idTrip: number;
   onCheckinSuccess: () => void;
+  defaultBooking?: string;
+  setGetting?: any;
 }) => {
   const [showQRScan, setShowQRScan] = useState(false);
   const [acceptCamera, setAcceptCamera] = useState(false);
-  const [bookingCode, setBookingCode] = useState("");
+  const [bookingCode, setBookingCode] = useState('');
   const [customer, setCustomer] = useState();
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   useEffect(() => {
     checkPermission();
   }, []);
+
+  // useEffect(() => {
+  //   if (defaultBooking) {
+  //     setBookingCode(defaultBooking);
+  //     setTimeout(() => {
+  //       handleCheckin(defaultBooking);
+  //     }, 1000);
+  //   }
+  // }, [defaultBooking]);
 
   const checkPermission = async () => {
     const status = await BarCodeScanner.getPermissionsAsync();
@@ -38,82 +51,79 @@ export const Checkin = ({
   };
 
   const handlePressQR = async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
-    if (status === "granted") {
-      setAcceptCamera(status === "granted");
+    const {status} = await BarCodeScanner.requestPermissionsAsync();
+    if (status === 'granted') {
+      setAcceptCamera(status === 'granted');
       setShowQRScan(true);
       return;
     }
 
-    toast.show("Bạn không có quyền truy cập camera", { type: "error" });
+    toast.show('Bạn không có quyền truy cập camera', {type: 'error'});
   };
 
-  const handleCheckin = async () => {
+  const handleCheckin = async (defaultCode?: string) => {
     try {
       setLoading(true);
-      const { data } = await putCheckin(idTrip, bookingCode);
+      setGetting(pre => [...pre, defaultBooking]);
+      const {data} = await putCheckin(idTrip, bookingCode);
       if (data.status === StatusApiCall.Success) {
-        let seats = "";
-        data.data?.listTicket.map((item) => {
-          seats = seats + item.seatName + ", ";
+        let seats = '';
+        data.data?.listTicket.map(item => {
+          seats = seats + item.seatName + ', ';
         });
-        setCustomer({ ...data.data, seats });
+        setCustomer({...data.data, seats});
         onCheckinSuccess();
         return;
       }
 
-      setMessage("Mã đặt vé không chính xác!");
+      setMessage('Mã đặt vé không chính xác!');
     } catch {
-      toast.show("Có lỗi xảy ra", { type: "error" });
+      toast.show('Có lỗi xảy ra', {type: 'error'});
     } finally {
+      setGetting(pre => pre.filter(item => item !== defaultBooking));
       setLoading(false);
     }
   };
 
-  const handleScanCodeSuccess = (value) => {
+  const handleScanCodeSuccess = value => {
     setBookingCode(value.data);
     setShowQRScan(false);
     setCustomer(null);
-    setMessage("");
+    setMessage('');
   };
 
   return (
     <ReactNativeModal
       isVisible={show}
       style={{
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
         borderRadius: 20,
         padding: 24,
-        maxHeight: "80%",
-      }}
-    >
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView style={{ flex: 1 }}>
+        maxHeight: '80%',
+      }}>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView style={{flex: 1}}>
           <TouchableOpacity
             onPress={onClose}
             style={{
               padding: 4,
-              position: "absolute",
+              position: 'absolute',
               right: 0,
               top: 0,
               zIndex: 10,
-            }}
-          >
-            <Icon name="close-circle" size={24} color={"#ccc"} />
+            }}>
+            <Icon name="close-circle" size={24} color={'#ccc'} />
           </TouchableOpacity>
-          <Text
-            style={{ fontSize: 18, fontWeight: "800", textAlign: "center" }}
-          >
+          <Text style={{fontSize: 18, fontWeight: '800', textAlign: 'center'}}>
             Checkin
           </Text>
 
           <View
             style={{
               marginVertical: 16,
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
             <TextInput
               style={{
                 borderWidth: 1,
@@ -127,30 +137,26 @@ export const Checkin = ({
               onChangeText={(value: string) => {
                 setBookingCode(value);
                 setCustomer(null);
-                setMessage("");
+                setMessage('');
               }}
             />
             <TouchableOpacity
-              style={{ marginLeft: 16 }}
+              style={{marginLeft: 16}}
               onPress={() => {
-                setBookingCode("");
-                setMessage("");
+                setBookingCode('');
+                setMessage('');
                 setCustomer(null);
-              }}
-            >
+              }}>
               <Icon name="backspace-outline" size={24} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{ marginLeft: 16 }}
-              onPress={handlePressQR}
-            >
+            <TouchableOpacity style={{marginLeft: 16}} onPress={handlePressQR}>
               <Icon name="qrcode-scan" size={30} />
             </TouchableOpacity>
           </View>
-          <Text style={{ color: "red", marginBottom: 16 }}>{message}</Text>
-          <Button title={"Checkin"} onPress={handleCheckin} loading={loading} />
-          <View style={{ marginVertical: 16 }}>
-            <Text style={{ fontSize: 18, fontWeight: "800", marginBottom: 16 }}>
+          <Text style={{color: 'red', marginBottom: 16}}>{message}</Text>
+          <Button title={'Checkin'} onPress={handleCheckin} loading={loading} />
+          <View style={{marginVertical: 16}}>
+            <Text style={{fontSize: 18, fontWeight: '800', marginBottom: 16}}>
               Thông tin khách hàng
             </Text>
             <InfoItem label="Họ tên" value={customer?.userSystemDTO.fullName} />
@@ -170,26 +176,24 @@ export const Checkin = ({
           <BarCodeScanner
             onBarCodeScanned={handleScanCodeSuccess}
             style={{
-              backgroundColor: "black",
-              position: "absolute",
+              backgroundColor: 'black',
+              position: 'absolute',
               top: 0,
               left: 0,
               bottom: 0,
               right: 0,
             }}
-            barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
-          >
+            barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}>
             <TouchableOpacity
               onPress={() => setShowQRScan(false)}
               style={{
                 padding: 4,
-                position: "absolute",
+                position: 'absolute',
                 right: 12,
                 top: 12,
                 zIndex: 10,
-              }}
-            >
-              <Icon name="close-circle" size={24} color={"#ccc"} />
+              }}>
+              <Icon name="close-circle" size={24} color={'#ccc'} />
             </TouchableOpacity>
           </BarCodeScanner>
         )}
@@ -198,17 +202,11 @@ export const Checkin = ({
   );
 };
 
-const InfoItem = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | number;
-}) => {
+const InfoItem = ({label, value}: {label: string; value: string | number}) => {
   return (
-    <View style={{ flexDirection: "row", marginBottom: 4 }}>
-      <Text style={{ flex: 1 }}>{label}</Text>
-      <Text style={{ flex: 2, fontWeight: "600" }}>{value}</Text>
+    <View style={{flexDirection: 'row', marginBottom: 4}}>
+      <Text style={{flex: 1}}>{label}</Text>
+      <Text style={{flex: 2, fontWeight: '600'}}>{value}</Text>
     </View>
   );
 };
