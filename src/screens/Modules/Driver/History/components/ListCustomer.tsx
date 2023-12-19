@@ -18,6 +18,7 @@ import {
 } from 'react-native-table-component';
 import {BookingStatusId} from '@constants/route';
 
+const array = [BookingStatusId.Checkin,BookingStatusId.Finish]
 export const ListCustomer: React.FC<{
   show: boolean;
   onClose: () => void;
@@ -39,7 +40,7 @@ export const ListCustomer: React.FC<{
         {name: customer?.userSystemDTO.fullName, id: seat.idBooking},
         customer?.userSystemDTO.phone,
         customer
-          ? customer.bookingStatus === BookingStatusId.Checkin
+          ? array.includes(customer.bookingStatus)
             ? true
             : false
           : null,
